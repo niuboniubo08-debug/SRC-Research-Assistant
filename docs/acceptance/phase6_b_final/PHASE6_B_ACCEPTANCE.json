@@ -1,0 +1,197 @@
+{
+  "phase": "6B",
+  "phase_name": "unified report data service",
+  "project": "D:\\挖漏洞\\SRC-Research-Assistant",
+  "version": "0.5.0",
+  "schema_version": 5,
+  "phase_b_status": "sealed_with_recorded_exception",
+  "seal_status": "sealed_with_recorded_exception",
+  "sealed": true,
+  "seal_exception_present": true,
+  "phase_c_started": false,
+  "phase_c_allowed": false,
+  "schema_changed": false,
+  "production_code_modified": false,
+  "historical_archive_modified": true,
+  "phase5_core_archive_status": "valid_and_hash_matching",
+  "historical_workspace_manifest_exact_match": false,
+  "archive": {
+    "directory": "docs/acceptance/phase6_b_final",
+    "file_count": 9,
+    "manifest": "PHASE6_B_FILE_MANIFEST.txt",
+    "manifest_entries": 11,
+    "manifest_excludes_self": true,
+    "manifest_covers_seal_documents": false,
+    "seal_documents": [
+      "PHASE6_B_SEAL_DECISION.md",
+      "PHASE6_B_EXCEPTION_REGISTER.md"
+    ],
+    "manifest_self_sha256": null,
+    "manifest_self_sha256_note": "The manifest excludes its own hash and was not updated by seal step 2; the manifest SHA-256 is reported in the final seal response after independent recomputation."
+  },
+  "stage_b_files": [
+    {
+      "path": "core/models/report.py",
+      "size": 7594,
+      "sha256": "6855a781bb312b024e26c72d57dd5e59f53f60740bc3e3ef3d99202eabf3d86c"
+    },
+    {
+      "path": "repositories/report_repository.py",
+      "size": 11847,
+      "sha256": "1553beadf2add1f85fe8a5f0271114aab485be6f47c3160bdca4a0a1902f4636"
+    },
+    {
+      "path": "services/report_service.py",
+      "size": 13179,
+      "sha256": "7e0e56a5b4e69be1ee6f36b0b16ae2c02b40f50416dc1dd43c1697034d9cffcd"
+    },
+    {
+      "path": "tests/test_report_service.py",
+      "size": 22297,
+      "sha256": "538a0bc4e62ffa3a5a50f04ffa2218f1b4cb5013e1ff2d3f80011c5875a6c789"
+    },
+    {
+      "path": "docs/PHASE6_B_REPORT.md",
+      "size": 18053,
+      "sha256": "f06924d75a78086d1970c355610906d8c631ffb1cd37dd3a764dc98042d51a1f"
+    }
+  ],
+  "tests": {
+    "baseline": {
+      "collected": 127,
+      "passed": 126,
+      "failed": 0,
+      "skipped": 1
+    },
+    "targeted_historical": {
+      "passed": 18,
+      "failed": 0,
+      "duration_seconds": 3.86
+    },
+    "full_historical": {
+      "collected": 145,
+      "passed": 144,
+      "failed": 0,
+      "skipped": 1,
+      "duration_seconds": 38.44
+    },
+    "full_current_rerun": {
+      "collected": 145,
+      "passed": 144,
+      "failed": 0,
+      "skipped": 1,
+      "duration_seconds": 41.51,
+      "exit_code": 0,
+      "output_file": "PHASE6_B_TEST_OUTPUT.txt",
+      "output_size": 1438,
+      "output_sha256": "bbb9072e1ef20e74a64ca1dfd8ba12aa8d217c5d3643a98df8d72c4f7c1edb11"
+    },
+    "skipped": {
+      "test": "test_symlink_to_outside_is_rejected",
+      "file": "tests/test_evidence_service.py:184",
+      "reason": "Windows current session cannot create a file symlink: [WinError 1314] 客户端没有所需的特权",
+      "existing_before_phase_b": true
+    }
+  },
+  "database": {
+    "read_only_mode": "sqlite URI mode=ro",
+    "main": {
+      "path": "storage/src_research.db",
+      "schema_version": 5,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "sha256_before": "f03cfb81bf0cf4cee3367e1413e26919e30fa763c2d1b792aa03b5300e3128bb",
+      "sha256_after": "f03cfb81bf0cf4cee3367e1413e26919e30fa763c2d1b792aa03b5300e3128bb",
+      "unchanged": true,
+      "tables": 11,
+      "indexes": 18,
+      "reports_rows": 0,
+      "findings_rows": 0,
+      "evidence_rows": 0
+    },
+    "phase5_acceptance": {
+      "path": "storage/phase5_acceptance/acceptance.db",
+      "schema_version": 5,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0,
+      "sha256_before": "03de49509b43428eb303f7dc38e1ff749cc58d1b3f186070c63706bba4ceb4c8",
+      "sha256_after": "03de49509b43428eb303f7dc38e1ff749cc58d1b3f186070c63706bba4ceb4c8",
+      "unchanged": true,
+      "tables": 11,
+      "indexes": 18,
+      "reports_rows": 0,
+      "findings_rows": 41,
+      "evidence_rows": 3,
+      "scan_tasks_rows": 4,
+      "authorizations_rows": 0,
+      "scope_assets_rows": 3,
+      "finding_status_history_rows": 2
+    }
+  },
+  "historical_archive_check": {
+    "manifest": "docs/acceptance/phase5_final/PHASE5_FILE_MANIFEST.txt",
+    "entries_checked": 253,
+    "matched": 246,
+    "unique_mismatched_files": 1,
+    "mismatch_entries": 2,
+    "missing_files": 1,
+    "mismatch": {
+      "path": "docs/acceptance/code_quality.json",
+      "expected_sha256": "5993473a569adb396d482b354ab21c830be7f557f022bea0c94b79d092d4fbe1",
+      "current_sha256": "f0d0fca2a1f144d9f44891df76d4bd581b55f52139687c68edfcdc748caf2e59"
+    },
+    "missing": [
+      "storage/_rebuild_manifest.py"
+    ],
+    "phase5_final_summary_sha256": "645abf1228ec8ca3081ee98e64f34bd4acf75481a1312c62cff7b7d514c74ba6",
+    "phase5_final_summary_matches_known_hash": true,
+    "action_taken": "Recorded only; not repaired, restored or overwritten."
+  },
+  "scope_checks": {
+    "report_page_placeholder": true,
+    "report_service_wired_in_app_or_ui": false,
+    "reports_package_files": [
+      "__init__.py"
+    ],
+    "storage_reports_files": [
+      ".gitkeep"
+    ],
+    "reportlab_available": false,
+    "report_rows_created": 0,
+    "report_files_created": 0
+  },
+  "seal_exceptions": [
+    {
+      "id": "P6B-EX-001",
+      "classification": "explained generated artifact difference",
+      "path": "docs/acceptance/code_quality.json",
+      "status": "explained_recorded",
+      "old_sha256": "5993473a569adb396d482b354ab21c830be7f557f022bea0c94b79d092d4fbe1",
+      "current_sha256": "f0d0fca2a1f144d9f44891df76d4bd581b55f52139687c68edfcdc748caf2e59",
+      "old_copy": "backups/src-research-assistant_phase5_final.zip",
+      "observed_change": "product_file_count: 57 -> 59"
+    },
+    {
+      "id": "P6B-EX-002",
+      "classification": "accepted unresolved historical workspace difference",
+      "path": "storage/_rebuild_manifest.py",
+      "status": "accepted_unresolved_recorded",
+      "manifest_size": 4150,
+      "manifest_sha256": "aed42f24e14aeae1b22a7ef161e15e9a5c19bef9251d2aa6a3573bf61de37d2a",
+      "restored": false,
+      "recreated": false,
+      "manifest_modified": false
+    }
+  ],
+  "manifest_note": "PHASE6_B_FILE_MANIFEST.txt was not modified by seal step 2. Its entries for PHASE6_B_ACCEPTANCE.json and PHASE6_B_FINAL_SUMMARY.md are the pre-step-2 hashes; this does not amend the phase-5 manifest.",
+  "known_limitations": [
+    "ReportSnapshot carries the full project Finding/Evidence collections; data_scope guides exporters.",
+    "ReportService is not wired into AppContext in phase B.",
+    "Historical scan-time authorization snapshots are unavailable.",
+    "Database has no universal real-scan/fixture provenance marker.",
+    "ReportEvidence.file_path is internal; exporters must use managed_path.",
+    "Semgrep remains unavailable in this Windows session.",
+    "No HTML/PDF/JSON exporter, report GUI, report record, ReportLab, Pillow or font was added."
+  ],
+  "next_required_action": "Seal recorded. Phase C requires a separate explicit authorization; do not auto-start phase C."
+}

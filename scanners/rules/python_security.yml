@@ -1,0 +1,100 @@
+rules:
+  - id: src-python-dynamic-exec
+    languages: [python]
+    message: "Avoid dynamic evaluation of untrusted input with eval/exec."
+    severity: ERROR
+    metadata:
+      title: "动态代码执行"
+      category: "代码执行"
+      confidence: "HIGH"
+      remediation: "避免对不可信输入使用 eval/exec；改用显式解析、白名单或受控分派表。"
+      cwe: "CWE-95"
+      references:
+        - "https://owasp.org/Top10/A03_2021-Injection/"
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+
+  - id: src-python-subprocess-shell
+    languages: [python]
+    message: "Avoid subprocess calls with shell=True on untrusted input."
+    severity: ERROR
+    metadata:
+      title: "命令注入风险"
+      category: "命令执行"
+      confidence: "HIGH"
+      remediation: "使用参数列表调用子进程，保持 shell=False，并校验允许的命令与参数。"
+      cwe: "CWE-78"
+      references:
+        - "https://owasp.org/Top10/A03_2021-Injection/"
+    pattern-either:
+      - pattern: subprocess.$FUNC(..., shell=True, ...)
+      - pattern: subprocess.$FUNC(shell=True, ...)
+
+  - id: src-python-os-system
+    languages: [python]
+    message: "os.system executes a shell command string."
+    severity: ERROR
+    metadata:
+      title: "os.system 命令执行"
+      category: "命令执行"
+      confidence: "HIGH"
+      remediation: "改用 subprocess.run 的参数列表形式，避免 shell 解析和命令拼接。"
+      cwe: "CWE-78"
+    pattern: os.system(...)
+
+  - id: src-python-unsafe-pickle
+    languages: [python]
+    message: "Untrusted pickle deserialization can lead to code execution."
+    severity: WARNING
+    metadata:
+      title: "不安全反序列化"
+      category: "反序列化"
+      confidence: "MEDIUM"
+      remediation: "不要反序列化不可信 pickle 数据；改用 JSON 等无代码执行能力的数据格式。"
+      cwe: "CWE-502"
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+
+  - id: src-python-yaml-load
+    languages: [python]
+    message: "yaml.load may instantiate unsafe Python objects."
+    severity: WARNING
+    metadata:
+      title: "不安全 YAML 解析"
+      category: "反序列化"
+      confidence: "MEDIUM"
+      remediation: "使用 yaml.safe_load，并限制输入来源和大小。"
+      cwe: "CWE-502"
+    pattern: yaml.load(...)
+
+  - id: src-python-disabled-tls-verification
+    languages: [python]
+    message: "TLS certificate verification is disabled."
+    severity: WARNING
+    metadata:
+      title: "TLS 证书校验关闭"
+      category: "传输安全"
+      confidence: "HIGH"
+      remediation: "保持 verify=True，使用受信任 CA；测试环境也应显式隔离，不应进入生产。"
+      cwe: "CWE-295"
+    pattern-either:
+      - pattern: requests.$METHOD(..., verify=False, ...)
+      - pattern: requests.$METHOD(verify=False, ...)
+
+  - id: src-python-hardcoded-secret
+    languages: [python]
+    message: "Possible hardcoded credential or API secret."
+    severity: WARNING
+    metadata:
+      title: "疑似硬编码凭据"
+      category: "凭据管理"
+      confidence: "MEDIUM"
+      remediation: "从环境变量或专用密钥管理服务读取秘密，并从版本历史中移除已泄露凭据。"
+      cwe: "CWE-798"
+    patterns:
+      - pattern: $VAR = "..."
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: (?i)^(password|passwd|pwd|secret|token|api_key|apikey|access_key)$

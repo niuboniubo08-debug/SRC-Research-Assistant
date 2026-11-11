@@ -1,0 +1,654 @@
+{
+  "generated_at": "2026-11-05T02:53:48Z",
+  "database": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\phase4_acceptance\\acceptance.db",
+  "scanner": {
+    "name": "pip-audit",
+    "version": "2.10.1",
+    "available": true,
+    "reason": ""
+  },
+  "project_ids": {
+    "requirements": 1,
+    "pyproject": 2,
+    "safe": 3
+  },
+  "discoveries": {
+    "requirements": {
+      "message": "已识别依赖文件：requirements.txt",
+      "files": [
+        {
+          "file": "requirements.txt",
+          "kind": "requirements",
+          "count": 1,
+          "supported": true,
+          "reason": ""
+        }
+      ],
+      "primary": "requirements.txt"
+    },
+    "pyproject": {
+      "message": "已识别依赖文件：pyproject.toml",
+      "files": [
+        {
+          "file": "pyproject.toml",
+          "kind": "pyproject",
+          "count": 1,
+          "supported": true,
+          "reason": ""
+        }
+      ],
+      "primary": "pyproject.toml"
+    },
+    "safe": {
+      "message": "已识别依赖文件：requirements.txt",
+      "files": [
+        {
+          "file": "requirements.txt",
+          "kind": "requirements",
+          "count": 1,
+          "supported": true,
+          "reason": ""
+        }
+      ],
+      "primary": "requirements.txt"
+    }
+  },
+  "outcomes": {
+    "requirements": {
+      "task_id": 1,
+      "status": "completed",
+      "progress": 100,
+      "finished_at": "2026-11-05T02:53:10Z",
+      "dependency_file": "requirements.txt",
+      "audited_dependencies": 5,
+      "findings_count": 19,
+      "result_summary": "已审计 5 个依赖，发现 19 个唯一漏洞。",
+      "error_message": "",
+      "warnings": [],
+      "errors": [],
+      "findings": [
+        {
+          "risk": "medium",
+          "dependency": "idna",
+          "current_version": "2.7",
+          "vulnerability_id": "PYSEC-2024-60",
+          "fix_versions": [
+            "3.7"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "idna",
+          "current_version": "2.7",
+          "vulnerability_id": "PYSEC-2026-215",
+          "fix_versions": [
+            "3.15"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2018-28",
+          "fix_versions": [
+            "2.20.0"
+          ],
+          "file": "requirements.txt",
+          "line": 1,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2023-74",
+          "fix_versions": [
+            "2.31.0"
+          ],
+          "file": "requirements.txt",
+          "line": 1,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-1872",
+          "fix_versions": [
+            "2.32.4"
+          ],
+          "file": "requirements.txt",
+          "line": 1,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-1873",
+          "fix_versions": [
+            "2.32.0"
+          ],
+          "file": "requirements.txt",
+          "line": 1,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-2275",
+          "fix_versions": [
+            "2.33.0"
+          ],
+          "file": "requirements.txt",
+          "line": 1,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2019-132",
+          "fix_versions": [
+            "1.24.3"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2019-133",
+          "fix_versions": [
+            "1.24.2"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2020-148",
+          "fix_versions": [
+            "1.25.9"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-192",
+          "fix_versions": [
+            "1.26.17",
+            "2.0.6"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-207",
+          "fix_versions": [
+            "1.24.2"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-212",
+          "fix_versions": [
+            "1.26.18",
+            "2.0.7"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-141",
+          "fix_versions": [
+            "2.7.0"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1994",
+          "fix_versions": [
+            "2.6.0"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1995",
+          "fix_versions": [
+            "1.26.19",
+            "2.2.2"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1996",
+          "fix_versions": [
+            "2.6.3"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1999",
+          "fix_versions": [
+            "2.5.0"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-4177",
+          "fix_versions": [
+            "2.8.0"
+          ],
+          "file": "requirements.txt",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        }
+      ]
+    },
+    "pyproject": {
+      "task_id": 2,
+      "status": "completed",
+      "progress": 100,
+      "finished_at": "2026-11-05T02:53:28Z",
+      "dependency_file": "pyproject.toml",
+      "audited_dependencies": 5,
+      "findings_count": 19,
+      "result_summary": "已审计 5 个依赖，发现 19 个唯一漏洞。",
+      "error_message": "",
+      "warnings": [],
+      "errors": [],
+      "findings": [
+        {
+          "risk": "medium",
+          "dependency": "idna",
+          "current_version": "2.7",
+          "vulnerability_id": "PYSEC-2024-60",
+          "fix_versions": [
+            "3.7"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "idna",
+          "current_version": "2.7",
+          "vulnerability_id": "PYSEC-2026-215",
+          "fix_versions": [
+            "3.15"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2018-28",
+          "fix_versions": [
+            "2.20.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2023-74",
+          "fix_versions": [
+            "2.31.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-1872",
+          "fix_versions": [
+            "2.32.4"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-1873",
+          "fix_versions": [
+            "2.32.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "requests",
+          "current_version": "2.19.0",
+          "vulnerability_id": "PYSEC-2026-2275",
+          "fix_versions": [
+            "2.33.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2019-132",
+          "fix_versions": [
+            "1.24.3"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2019-133",
+          "fix_versions": [
+            "1.24.2"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2020-148",
+          "fix_versions": [
+            "1.25.9"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-192",
+          "fix_versions": [
+            "1.26.17",
+            "2.0.6"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-207",
+          "fix_versions": [
+            "1.24.2"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2023-212",
+          "fix_versions": [
+            "1.26.18",
+            "2.0.7"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-141",
+          "fix_versions": [
+            "2.7.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1994",
+          "fix_versions": [
+            "2.6.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1995",
+          "fix_versions": [
+            "1.26.19",
+            "2.2.2"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1996",
+          "fix_versions": [
+            "2.6.3"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-1999",
+          "fix_versions": [
+            "2.5.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        },
+        {
+          "risk": "medium",
+          "dependency": "urllib3",
+          "current_version": "1.23",
+          "vulnerability_id": "PYSEC-2026-4177",
+          "fix_versions": [
+            "2.8.0"
+          ],
+          "file": "pyproject.toml",
+          "line": 0,
+          "source": "pip-audit/PyPI",
+          "scanner": "pip-audit",
+          "scanner_version": "2.10.1"
+        }
+      ]
+    },
+    "safe": {
+      "task_id": 3,
+      "status": "completed",
+      "progress": 100,
+      "finished_at": "2026-11-05T02:53:48Z",
+      "dependency_file": "requirements.txt",
+      "audited_dependencies": 1,
+      "findings_count": 0,
+      "result_summary": "已审计 1 个依赖，未发现已知漏洞。",
+      "error_message": "",
+      "warnings": [],
+      "errors": [],
+      "findings": []
+    }
+  },
+  "database_counts": {
+    "tasks": 3,
+    "findings": 38,
+    "findings_with_metadata": 38
+  },
+  "security": {
+    "requirements_has_vulns": true,
+    "pyproject_has_vulns": true,
+    "safe_has_no_vulns": true,
+    "safe_completed": true,
+    "metadata_complete": true,
+    "remote_scan": false,
+    "network_usage": "pip-audit public vulnerability service only"
+  }
+}

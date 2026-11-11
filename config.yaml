@@ -1,0 +1,26 @@
+app:
+  name: "SRC Research Assistant"
+  version: "0.5.0"
+  environment: "local"
+
+database:
+  path: "storage/src_research.db"
+
+storage:
+  root: "storage"
+  projects: "storage/projects"
+  evidence: "storage/evidence"
+  reports: "storage/reports"
+  logs: "storage/logs"
+
+ui:
+  theme: "dark"
+  window_width: 1440
+  window_height: 900
+
+security:
+  default_remote_access: "deny"
+  require_valid_authorization: true
+  allow_wildcard_scope: false
+  allow_redirect_following: false
+  require_exact_remote_match: true

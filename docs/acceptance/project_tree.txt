@@ -1,0 +1,240 @@
+D:\挖漏洞\
+├── .venv/   [独立 Python 虚拟环境；第三方依赖目录树未展开]
+└── SRC-Research-Assistant/
+    ├── app/
+    │   ├── __init__.py
+    │   ├── application.py
+    │   ├── bootstrap.py
+    │   └── config.py
+    ├── backups/
+    │   ├── src-research-assistant_acceptance_final.zip
+    │   ├── src-research-assistant_phase2_20261104T145255Z.zip
+    │   ├── src-research-assistant_phase3_final.zip
+    │   ├── src-research-assistant_phase4_final.zip
+    │   └── src-research-assistant_phase5_final.zip
+    ├── core/
+    │   ├── models/
+    │   │   ├── __init__.py
+    │   │   ├── authorization.py
+    │   │   ├── enums.py
+    │   │   ├── evidence.py
+    │   │   ├── finding.py
+    │   │   ├── project.py
+    │   │   ├── scan_task.py
+    │   │   ├── scope.py
+    │   │   └── system.py
+    │   ├── __init__.py
+    │   ├── errors.py
+    │   ├── logging_setup.py
+    │   └── timeutil.py
+    ├── database/
+    │   ├── __init__.py
+    │   ├── connection.py
+    │   └── schema.py
+    ├── docs/
+    │   ├── acceptance/
+    │   │   ├── ACCEPTANCE_REPORT.md
+    │   │   ├── code_quality.json
+    │   │   ├── entrypoint_acceptance.json
+    │   │   ├── entrypoint_runtime.png
+    │   │   ├── phase2_acceptance.json
+    │   │   ├── phase3_acceptance.json
+    │   │   ├── PHASE3_ACCEPTANCE_REPORT.md
+    │   │   ├── phase3_source_audit.png
+    │   │   ├── PHASE3_TEST_REPORT.md
+    │   │   ├── phase4_acceptance.json
+    │   │   ├── PHASE4_ACCEPTANCE_REPORT.md
+    │   │   ├── phase4_dependency_audit.png
+    │   │   ├── PHASE4_TEST_REPORT.md
+    │   │   ├── phase5_acceptance.json
+    │   │   ├── PHASE5_ACCEPTANCE_REPORT.md
+    │   │   ├── phase5_evidence_center.png
+    │   │   ├── PHASE5_TEST_REPORT.md
+    │   │   ├── phase5_vulnerability_management.png
+    │   │   ├── project_tree.txt
+    │   │   ├── ui_acceptance.json
+    │   │   └── ui_runtime.png
+    │   ├── screenshots/
+    │   │   ├── phase2_authorization_management.png
+    │   │   ├── phase2_dashboard.png
+    │   │   ├── phase2_project_management.png
+    │   │   └── phase2_scope_assets.png
+    │   ├── ARCHITECTURE.md
+    │   ├── PHASE2_CHANGES.md
+    │   ├── PHASE3_ARCHITECTURE.md
+    │   ├── PHASE4_ARCHITECTURE.md
+    │   ├── PHASE5_ARCHITECTURE.md
+    │   └── TEST_REPORT.md
+    ├── reports/
+    │   └── __init__.py
+    ├── repositories/
+    │   ├── __init__.py
+    │   ├── evidence_repository.py
+    │   └── vulnerability_repository.py
+    ├── scanners/
+    │   ├── rules/
+    │   │   └── python_security.yml
+    │   ├── __init__.py
+    │   ├── bandit_scanner.py
+    │   ├── base.py
+    │   ├── pip_audit_scanner.py
+    │   ├── process_runner.py
+    │   └── semgrep_scanner.py
+    ├── security/
+    │   ├── __init__.py
+    │   ├── scope_rules.py
+    │   └── scope_validator.py
+    ├── services/
+    │   ├── __init__.py
+    │   ├── audit_service.py
+    │   ├── authorization_service.py
+    │   ├── dependency_audit_service.py
+    │   ├── evidence_service.py
+    │   ├── project_service.py
+    │   ├── scan_service.py
+    │   ├── scope_asset_service.py
+    │   └── vulnerability_service.py
+    ├── storage/
+    │   ├── acceptance/
+    │   │   ├── backups/
+    │   │   │   └── acceptance_v1_20261104T150611Z.db
+    │   │   ├── evidence/
+    │   │   ├── local_project/
+    │   │   │   └── app.py
+    │   │   ├── logs/
+    │   │   │   ├── app.log
+    │   │   │   └── audit.jsonl
+    │   │   ├── outside_scope/
+    │   │   ├── projects/
+    │   │   ├── reports/
+    │   │   ├── acceptance.db
+    │   │   ├── authorization.pdf
+    │   │   └── config.yaml
+    │   ├── backups/
+    │   │   ├── src_research_v1_20261104T143150Z.db
+    │   │   ├── src_research_v2_20261105T020152Z.db
+    │   │   ├── src_research_v3_20261105T024055Z.db
+    │   │   └── src_research_v4_20261105T034341Z.db
+    │   ├── evidence/
+    │   │   └── .gitkeep
+    │   ├── logs/
+    │   │   ├── .gitkeep
+    │   │   └── app.log
+    │   ├── phase3_acceptance/
+    │   │   ├── backups/
+    │   │   │   ├── acceptance_v1_20261105T021157Z.db
+    │   │   │   └── acceptance_v2_20261105T021157Z.db
+    │   │   ├── evidence/
+    │   │   ├── logs/
+    │   │   │   ├── app.log
+    │   │   │   └── audit.jsonl
+    │   │   ├── projects/
+    │   │   ├── reports/
+    │   │   ├── safe_project/
+    │   │   │   └── safe.py
+    │   │   ├── unsafe_project/
+    │   │   │   └── unsafe.py
+    │   │   ├── acceptance.db
+    │   │   └── config.yaml
+    │   ├── phase4_acceptance/
+    │   │   ├── backups/
+    │   │   │   ├── acceptance_v1_20261105T025235Z.db
+    │   │   │   ├── acceptance_v2_20261105T025236Z.db
+    │   │   │   └── acceptance_v3_20261105T025236Z.db
+    │   │   ├── evidence/
+    │   │   ├── logs/
+    │   │   │   ├── app.log
+    │   │   │   └── audit.jsonl
+    │   │   ├── projects/
+    │   │   ├── pyproject_project/
+    │   │   │   └── pyproject.toml
+    │   │   ├── reports/
+    │   │   ├── requirements_project/
+    │   │   │   ├── phase5_demo_source.py
+    │   │   │   ├── phase5_evidence_screenshot.png
+    │   │   │   └── requirements.txt
+    │   │   ├── safe_project/
+    │   │   │   └── requirements.txt
+    │   │   ├── acceptance.db
+    │   │   └── config.yaml
+    │   ├── phase5_acceptance/
+    │   │   ├── backups/
+    │   │   │   └── acceptance_v4_20261105T033702Z.db
+    │   │   ├── evidence/
+    │   │   │   └── project_1/
+    │   │   │       └── 1062362eb51642dead2aaeffbdd3bacb_phase5_evidence_screenshot.png
+    │   │   ├── logs/
+    │   │   │   ├── app.log
+    │   │   │   └── audit.jsonl
+    │   │   ├── projects/
+    │   │   ├── reports/
+    │   │   ├── acceptance.db
+    │   │   └── config.yaml
+    │   ├── projects/
+    │   │   └── .gitkeep
+    │   ├── reports/
+    │   │   └── .gitkeep
+    │   └── src_research.db   [主数据库]
+    ├── tests/
+    │   ├── __init__.py
+    │   ├── conftest.py
+    │   ├── phase5_helpers.py
+    │   ├── test_authorization_service.py
+    │   ├── test_bandit_scanner.py
+    │   ├── test_database.py
+    │   ├── test_dependency_audit_service.py
+    │   ├── test_evidence_service.py
+    │   ├── test_finding_models.py
+    │   ├── test_local_path_audit.py
+    │   ├── test_phase5_migration.py
+    │   ├── test_pip_audit_scanner.py
+    │   ├── test_process_runner.py
+    │   ├── test_project_service.py
+    │   ├── test_scan_service.py
+    │   ├── test_scope_validator.py
+    │   ├── test_semgrep_scanner.py
+    │   ├── test_ui.py
+    │   ├── test_ui_dependency_audit.py
+    │   ├── test_ui_dialogs.py
+    │   ├── test_ui_phase5.py
+    │   ├── test_ui_source_audit.py
+    │   └── test_vulnerability_service.py
+    ├── tools/
+    │   ├── acceptance_ui.py
+    │   ├── capture_phase3_ui.py
+    │   ├── capture_phase4_ui.py
+    │   ├── capture_phase5_ui.py
+    │   ├── capture_ui.py
+    │   ├── code_quality_check.py
+    │   ├── create_backup.py
+    │   ├── entrypoint_acceptance.py
+    │   ├── generate_project_tree.py
+    │   ├── inspect_db.py
+    │   ├── run_acceptance.py
+    │   ├── run_phase3_acceptance.py
+    │   ├── run_phase4_acceptance.py
+    │   └── run_phase5_acceptance.py
+    ├── ui/
+    │   ├── __init__.py
+    │   ├── app_state.py
+    │   ├── config_audit_page.py
+    │   ├── dashboard.py
+    │   ├── dependency_page.py
+    │   ├── evidence_dialog.py
+    │   ├── evidence_page.py
+    │   ├── history_page.py
+    │   ├── main_window.py
+    │   ├── placeholder.py
+    │   ├── project_page.py
+    │   ├── report_page.py
+    │   ├── settings_page.py
+    │   ├── source_audit_page.py
+    │   ├── theme.py
+    │   ├── vulnerability_page.py
+    │   └── widgets.py
+    ├── .gitignore
+    ├── config.yaml   [配置]
+    ├── main.py   [实际入口]
+    ├── pytest.ini
+    ├── README.md
+    └── requirements.txt

@@ -1,0 +1,77 @@
+{
+  "entrypoint": "app.application.main([])",
+  "production_entry_file": "main.py",
+  "started": true,
+  "visible_after_show": true,
+  "navigation_labels": [
+    "01    总览",
+    "02    项目管理",
+    "03    源代码审计",
+    "04    依赖漏洞检查",
+    "05    安全配置检查",
+    "06    漏洞管理",
+    "07    证据中心",
+    "08    报告中心",
+    "09    历史记录",
+    "10    系统设置"
+  ],
+  "navigation_ok": true,
+  "closed_normally": true,
+  "screenshot": "D:\\挖漏洞\\SRC-Research-Assistant\\docs\\acceptance\\entrypoint_runtime.png",
+  "window_title": "SRC Research Assistant · 0.5.0",
+  "navigation_checks": [
+    {
+      "key": "dashboard",
+      "ok": true,
+      "page": "DashboardPage"
+    },
+    {
+      "key": "projects",
+      "ok": true,
+      "page": "ProjectPage"
+    },
+    {
+      "key": "source_audit",
+      "ok": true,
+      "page": "SourceAuditPage"
+    },
+    {
+      "key": "dependencies",
+      "ok": true,
+      "page": "DependencyPage"
+    },
+    {
+      "key": "config_audit",
+      "ok": true,
+      "page": "ConfigAuditPage"
+    },
+    {
+      "key": "vulnerabilities",
+      "ok": true,
+      "page": "VulnerabilityPage"
+    },
+    {
+      "key": "evidence",
+      "ok": true,
+      "page": "EvidencePage"
+    },
+    {
+      "key": "reports",
+      "ok": true,
+      "page": "ReportPage"
+    },
+    {
+      "key": "history",
+      "ok": true,
+      "page": "HistoryPage"
+    },
+    {
+      "key": "settings",
+      "ok": true,
+      "page": "SettingsPage"
+    }
+  ],
+  "screenshot_saved": true,
+  "application_exit_code": 0,
+  "success": true
+}

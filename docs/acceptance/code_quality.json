@@ -1,0 +1,345 @@
+{
+  "product_file_count": 59,
+  "empty_functions": [],
+  "empty_function_count": 0,
+  "pass_count": 19,
+  "pass_locations": [
+    {
+      "file": "app/application.py",
+      "line": 55,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "database/connection.py",
+      "line": 204,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "database/connection.py",
+      "line": 194,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "database/connection.py",
+      "line": 81,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "database/connection.py",
+      "line": 147,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 22,
+      "parent": "ClassDef",
+      "context_name": "ScannerUnavailable"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 26,
+      "parent": "ClassDef",
+      "context_name": "ScannerExecutionError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 30,
+      "parent": "ClassDef",
+      "context_name": "ScannerParseError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 34,
+      "parent": "ClassDef",
+      "context_name": "ScannerTimeoutError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 38,
+      "parent": "ClassDef",
+      "context_name": "ScanCancelled"
+    },
+    {
+      "file": "scanners/process_runner.py",
+      "line": 52,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "scanners/process_runner.py",
+      "line": 158,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "security/scope_rules.py",
+      "line": 44,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "security/scope_validator.py",
+      "line": 71,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "services/dependency_audit_service.py",
+      "line": 513,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "services/scan_service.py",
+      "line": 345,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "services/scan_service.py",
+      "line": 350,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "ui/dependency_page.py",
+      "line": 776,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    },
+    {
+      "file": "ui/source_audit_page.py",
+      "line": 766,
+      "parent": "ExceptHandler",
+      "context_name": ""
+    }
+  ],
+  "pass_outside_except_handlers": [],
+  "pass_in_exception_classes": [
+    {
+      "file": "scanners/base.py",
+      "line": 22,
+      "parent": "ClassDef",
+      "context_name": "ScannerUnavailable"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 26,
+      "parent": "ClassDef",
+      "context_name": "ScannerExecutionError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 30,
+      "parent": "ClassDef",
+      "context_name": "ScannerParseError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 34,
+      "parent": "ClassDef",
+      "context_name": "ScannerTimeoutError"
+    },
+    {
+      "file": "scanners/base.py",
+      "line": 38,
+      "parent": "ClassDef",
+      "context_name": "ScanCancelled"
+    }
+  ],
+  "todo_count": 0,
+  "todos": [],
+  "ui_scanner_imports": [],
+  "ui_sql_statements": [],
+  "sqlite_import_files": [
+    "core/models/authorization.py",
+    "core/models/evidence.py",
+    "core/models/finding.py",
+    "core/models/project.py",
+    "core/models/scan_task.py",
+    "core/models/scope.py",
+    "core/models/system.py",
+    "database/connection.py",
+    "services/audit_service.py"
+  ],
+  "status_literal_count": 27,
+  "status_literals": [
+    {
+      "file": "core/models/enums.py",
+      "line": 47,
+      "status": "pending",
+      "text": "PENDING = \"pending\""
+    },
+    {
+      "file": "core/models/enums.py",
+      "line": 48,
+      "status": "confirmed",
+      "text": "CONFIRMED = \"confirmed\""
+    },
+    {
+      "file": "core/models/enums.py",
+      "line": 49,
+      "status": "expired",
+      "text": "EXPIRED = \"expired\""
+    },
+    {
+      "file": "core/models/enums.py",
+      "line": 50,
+      "status": "revoked",
+      "text": "REVOKED = \"revoked\""
+    },
+    {
+      "file": "core/models/enums.py",
+      "line": 161,
+      "status": "confirmed",
+      "text": "CONFIRMED = \"confirmed\""
+    },
+    {
+      "file": "core/models/enums.py",
+      "line": 270,
+      "status": "pending",
+      "text": "PENDING = \"pending\""
+    },
+    {
+      "file": "database/schema.py",
+      "line": 37,
+      "status": "pending",
+      "text": "authorization_status  TEXT NOT NULL DEFAULT 'pending'"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 38,
+      "status": "pending",
+      "text": "CHECK(authorization_status IN ('pending', 'confirmed', 'expired', 'revoked')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 38,
+      "status": "confirmed",
+      "text": "CHECK(authorization_status IN ('pending', 'confirmed', 'expired', 'revoked')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 38,
+      "status": "expired",
+      "text": "CHECK(authorization_status IN ('pending', 'confirmed', 'expired', 'revoked')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 38,
+      "status": "revoked",
+      "text": "CHECK(authorization_status IN ('pending', 'confirmed', 'expired', 'revoked')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 52,
+      "status": "pending",
+      "text": "status          TEXT NOT NULL DEFAULT 'pending'"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 53,
+      "status": "pending",
+      "text": "CHECK(status IN ('pending', 'running', 'completed', 'failed', 'cancelled', 'blocked')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 74,
+      "status": "confirmed",
+      "text": "CHECK(status IN ('open', 'confirmed', 'fixed', 'false_positive', 'accepted_risk')),"
+    },
+    {
+      "file": "database/schema.py",
+      "line": 220,
+      "status": "confirmed",
+      "text": "CHECK(status IN ('open', 'reviewing', 'confirmed',"
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 249,
+      "status": "revoked",
+      "text": "action = \"revoked\" if status is AuthStatus.REVOKED else \"updated\""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 252,
+      "status": "revoked",
+      "text": "if action == \"revoked\""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 354,
+      "status": "confirmed",
+      "text": "\"SELECT COUNT(*) AS count FROM authorizations WHERE authorization_status = 'confirmed' \""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 369,
+      "status": "confirmed",
+      "text": "\"SELECT COUNT(*) AS count FROM authorizations WHERE authorization_status = 'confirmed' \""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 390,
+      "status": "confirmed",
+      "text": "\"SELECT * FROM authorizations WHERE authorization_status = 'confirmed' \""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 403,
+      "status": "expired",
+      "text": "\"UPDATE authorizations SET authorization_status = 'expired', updated_at = ? \""
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 404,
+      "status": "confirmed",
+      "text": "\"WHERE authorization_id = ? AND authorization_status = 'confirmed'\","
+    },
+    {
+      "file": "services/authorization_service.py",
+      "line": 411,
+      "status": "expired",
+      "text": "action=\"expired\","
+    },
+    {
+      "file": "services/dependency_audit_service.py",
+      "line": 467,
+      "status": "pending",
+      "text": "\"VALUES (?, 'dependency_audit', ?, 'pending', ?, 0, ?)\","
+    },
+    {
+      "file": "services/scan_service.py",
+      "line": 298,
+      "status": "pending",
+      "text": "\"VALUES (?, 'source_audit', ?, 'pending', ?, 0, ?)\","
+    },
+    {
+      "file": "ui/project_page.py",
+      "line": 1055,
+      "status": "revoked",
+      "text": "\"revoked\": \"撤销\","
+    },
+    {
+      "file": "ui/project_page.py",
+      "line": 1056,
+      "status": "expired",
+      "text": "\"expired\": \"到期\","
+    }
+  ],
+  "suspicious_hardcoded_confirmed_in_security_or_ui": [],
+  "verdicts": {
+    "empty_functions": "PASS",
+    "pass_usage": "PASS",
+    "todo": "PASS",
+    "ui_scanner_direct_calls": "PASS",
+    "ui_sql_access": "PASS",
+    "database_connection_centralized": "PASS",
+    "hardcoded_confirmed_allow": "PASS"
+  }
+}

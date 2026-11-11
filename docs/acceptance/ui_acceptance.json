@@ -1,0 +1,78 @@
+{
+  "started": true,
+  "window_title": "SRC Research Assistant · 0.2.0",
+  "visible_after_show": true,
+  "navigation_labels": [
+    "01    总览",
+    "02    项目管理",
+    "03    源代码审计",
+    "04    依赖漏洞检查",
+    "05    安全配置检查",
+    "06    漏洞管理",
+    "07    证据中心",
+    "08    报告中心",
+    "09    历史记录",
+    "10    系统设置"
+  ],
+  "navigation_checks": [
+    {
+      "key": "dashboard",
+      "ok": true,
+      "current_page": "DashboardPage"
+    },
+    {
+      "key": "projects",
+      "ok": true,
+      "current_page": "ProjectPage"
+    },
+    {
+      "key": "source_audit",
+      "ok": true,
+      "current_page": "SourceAuditPage"
+    },
+    {
+      "key": "dependencies",
+      "ok": true,
+      "current_page": "DependencyPage"
+    },
+    {
+      "key": "config_audit",
+      "ok": true,
+      "current_page": "ConfigAuditPage"
+    },
+    {
+      "key": "vulnerabilities",
+      "ok": true,
+      "current_page": "VulnerabilityPage"
+    },
+    {
+      "key": "evidence",
+      "ok": true,
+      "current_page": "EvidencePage"
+    },
+    {
+      "key": "reports",
+      "ok": true,
+      "current_page": "ReportPage"
+    },
+    {
+      "key": "history",
+      "ok": true,
+      "current_page": "HistoryPage"
+    },
+    {
+      "key": "settings",
+      "ok": true,
+      "current_page": "SettingsPage"
+    }
+  ],
+  "all_pages_switched": true,
+  "maximize_button": true,
+  "close_button": true,
+  "closed_normally": true,
+  "screenshot": "D:\\挖漏洞\\SRC-Research-Assistant\\docs\\acceptance\\ui_runtime.png",
+  "database": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\src_research.db",
+  "screenshot_saved": true,
+  "qt_event_loop_exit_code": 0,
+  "success": true
+}

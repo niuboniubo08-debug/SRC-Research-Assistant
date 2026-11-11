@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ view.title }}</title>
+<style>
+:root {
+    --ink: #1f2933;
+    --muted: #5c6b7a;
+    --line: #d9e2ec;
+    --paper: #ffffff;
+    --soft: #f5f7fa;
+    --accent: #1b4f72;
+    --danger: #9b1c1c;
+    --warning: #8a5a00;
+    --warning-bg: #fff8e5;
+}
+* { box-sizing: border-box; }
+html { font-size: 14px; }
+body {
+    margin: 0;
+    padding: 28px;
+    color: var(--ink);
+    background: var(--soft);
+    font-family: "Microsoft YaHei", "Noto Sans CJK SC", "SimHei", "PingFang SC", sans-serif;
+    line-height: 1.65;
+}
+.page { max-width: 1120px; margin: 0 auto; }
+.cover {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-top: 5px solid var(--accent);
+    padding: 28px 34px;
+    margin-bottom: 18px;
+}
+.eyebrow {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+h1 { font-size: 1.9rem; line-height: 1.3; margin: 8px 0 4px; }
+h2 { font-size: 1.2rem; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+h3 { font-size: 1rem; margin: 0 0 8px; }
+.deck { color: var(--muted); margin: 0 0 16px; }
+.meta-grid, .facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 18px;
+    margin: 0;
+}
+.meta-grid div, .facts div { min-width: 0; }
+dt { color: var(--muted); font-size: 0.78rem; }
+dd { margin: 1px 0 0; word-break: break-word; }
+.panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+}
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 12px 0 16px;
+}
+.metric { background: var(--soft); padding: 10px 12px; border-left: 3px solid var(--accent); }
+.metric strong { display: block; font-size: 1.35rem; line-height: 1.2; }
+.metric span { color: var(--muted); font-size: 0.78rem; }
+.badge {
+    display: inline-block;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0 8px;
+    margin: 0 4px 4px 0;
+    font-size: 0.76rem;
+    color: var(--muted);
+    background: var(--soft);
+}
+.finding { border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 16px; margin-bottom: 14px; }
+.finding-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.finding-head h3 { flex: 1; }
+.facts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 10px 0 12px; }
+.label { color: var(--muted); font-size: 0.78rem; margin-top: 10px; }
+.prewrap { white-space: pre-wrap; overflow-wrap: anywhere; margin: 4px 0 10px; }
+.muted, .note { color: var(--muted); font-size: 0.82rem; }
+.warning {
+    background: var(--warning-bg);
+    border: 1px solid #ecd9a4;
+    border-left: 4px solid var(--warning);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+.warning h2 { color: var(--warning); border-bottom-color: #ecd9a4; }
+.warning ul, .limitations ul { margin: 6px 0 0 20px; padding: 0; }
+.limitations { border-left: 4px solid var(--muted); }
+.limitations h2 { color: var(--muted); }
+.empty { padding: 12px 14px; background: var(--soft); border: 1px dashed var(--line); color: var(--muted); }
+.data-scope { color: var(--muted); font-size: 0.78rem; }
+.table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.table th, .table td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.table th { background: var(--soft); color: var(--muted); font-weight: 600; }
+.count-list { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0; padding: 0; list-style: none; }
+.count-list li { background: var(--soft); border: 1px solid var(--line); padding: 2px 8px; font-size: 0.8rem; }
+footer { color: var(--muted); font-size: 0.76rem; padding: 10px 0 0; }
+@media print {
+    body { padding: 0; background: #fff; }
+    .page { max-width: none; }
+    .panel, .cover { border-color: #bbb; break-inside: avoid; }
+    .finding, .table tr { break-inside: avoid; }
+    h2 { break-after: avoid; }
+    @page { margin: 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="cover">
+    <div class="eyebrow">SRC Research Assistant · 本地只读报告</div>
+    <h1>{{ view.title }}</h1>
+    <p class="deck">{{ view.report_type_label }} · {{ view.project.name }}</p>
+    <dl class="meta-grid">
+        <div><dt>项目</dt><dd>#{{ view.project.project_id }} · {{ view.project.name }}</dd></div>
+        <div><dt>项目类型</dt><dd>{{ view.project.type_label }}</dd></div>
+        <div><dt>项目状态</dt><dd>{{ view.project.status_label }}</dd></div>
+        <div><dt>生成时间</dt><dd>{{ view.generated_at }}</dd></div>
+        <div><dt>数据库 Schema</dt><dd>v{{ view.schema_version }}</dd></div>
+        <div><dt>快照</dt><dd>{{ view.snapshot_short }}</dd></div>
+    </dl>
+</header>
+
+<section class="panel">
+    <h2>报告概览</h2>
+    <div class="metrics">
+        <div class="metric"><strong>{{ view.stats.task_count }}</strong><span>扫描任务</span></div>
+        <div class="metric"><strong>{{ view.stats.finding_count }}</strong><span>Finding</span></div>
+        <div class="metric"><strong>{{ view.stats.evidence_count }}</strong><span>Evidence</span></div>
+        <div class="metric"><strong>{{ view.stats.dependency_finding_count }}</strong><span>依赖漏洞 Finding</span></div>
+    </div>
+    {% if not view.has_tasks %}
+    <p class="empty">当前报告快照中未包含扫描任务记录。不能据此推断扫描通过或没有风险。</p>
+    {% endif %}
+    <div class="label">风险分布</div>
+    <ul class="count-list">
+        {% for item in view.stats.severity_counts %}
+        <li>{{ item.label }}：{{ item.count }}</li>
+        {% endfor %}
+    </ul>
+    <div class="label">扫描器分布</div>
+    <ul class="count-list">
+        {% for item in view.stats.scanner_counts %}
+        <li>{{ item.label }}：{{ item.count }}</li>
+        {% else %}
+        <li>当前快照没有扫描器记录</li>
+        {% endfor %}
+    </ul>
+    <p class="data-scope">数据范围：{% for item in view.data_scope %}{{ item }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+</section>
+
+{% if view.warnings %}
+<section class="warning">
+    <h2>报告警告</h2>
+    <ul>
+        {% for item in view.warnings %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<section class="panel">
+    <h2>授权摘要（生成时刻）</h2>
+    <dl class="facts">
+        <div><dt>统计时间</dt><dd>{{ view.authorization.as_of }}</dd></div>
+        <div><dt>授权记录</dt><dd>{{ view.authorization.total_count }}</dd></div>
+        <div><dt>当前有效</dt><dd>{{ view.authorization.effective_count }}</dd></div>
+        <div><dt>已确认 / 已过期 / 待审核 / 已撤销</dt><dd>{{ view.authorization.confirmed_count }} / {{ view.authorization.expired_count }} / {{ view.authorization.pending_count }} / {{ view.authorization.revoked_count }}</dd></div>
+        <div><dt>资产范围</dt><dd>{{ view.authorization.scope_asset_count }}（启用 {{ view.authorization.active_scope_asset_count }}）</dd></div>
+        <div><dt>历史扫描时授权快照</dt><dd>{% if view.authorization.historical_scan_authorization_available %}可用{% else %}不可用{% endif %}</dd></div>
+    </dl>
+    {% if view.authorization.note %}
+    <p class="note">{{ view.authorization.note }}</p>
+    {% endif %}
+</section>
+
+{% if view.has_tasks %}
+<section class="panel">
+    <h2>扫描任务</h2>
+    <table class="table">
+        <thead><tr><th>ID</th><th>类型</th><th>状态</th><th>开始</th><th>完成</th><th>进度</th><th>扫描器</th></tr></thead>
+        <tbody>
+        {% for task in view.tasks %}
+            <tr>
+                <td>#{{ task.task_id }}</td>
+                <td>{{ task.type_label }}</td>
+                <td>{{ task.status_label }}</td>
+                <td>{{ task.started_at }}</td>
+                <td>{{ task.finished_at }}</td>
+                <td>{{ task.progress }}%</td>
+                <td>{{ task.scanners_text }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+
+{% if view.image_notice %}
+<section class="panel">
+    <h2>证据图片说明</h2>
+    <p class="empty">{{ view.image_notice }}</p>
+</section>
+{% endif %}
+
+<section class="panel limitations">
+    <h2>已知限制</h2>
+    {% if view.known_limitations %}
+    <ul>
+        {% for item in view.known_limitations %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">本快照没有附加已知限制。</p>
+    {% endif %}
+</section>
+
+<footer>
+    本地只读报告 · 快照 {{ view.snapshot_id }} · 不访问远程目标 · 不自动上传
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Runtime (phase 1-4)
+PySide6-Essentials>=6.10,<7
+PyYAML>=6.0,<7
+Jinja2>=3.1,<4
+bandit>=1.9,<2
+pip-audit>=2.10,<3
+
+# Semgrep is integrated with repository-owned local rules only.  On some
+# Windows session types the installed Semgrep binary can fail during its own
+# CA-store initialization; the application probes it and reports "不可用"
+# explicitly rather than fabricating scan results.
+semgrep>=1.100,<2
+
+# Test / development
+pytest>=8,<10
+pytest-qt>=4.4,<5

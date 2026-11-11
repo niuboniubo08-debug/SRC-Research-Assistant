@@ -1,0 +1,39 @@
+PHASE 6 B FINAL FILE MANIFEST
+========================================================================================
+Project: D:\挖漏洞\SRC-Research-Assistant
+Project version: 0.5.0
+Database schema: v5
+Phase: 6B (unified report data service)
+Seal status: sealed_with_recorded_exception
+Generated: 2026-11-05T20:15:34+08:00
+
+Coverage: 5 stage-B deliverables + 9 final archive records.
+The manifest excludes itself to avoid circular verification.
+Manifest self SHA-256 is reported separately by the verifier.
+No entry is duplicated in this manifest.
+
+STAGE B DELIVERABLES (5)
+----------------------------------------------------------------------------------------
+RELATIVE PATH                                                      SIZE SHA-256
+core/models/report.py                                              7594 6855a781bb312b024e26c72d57dd5e59f53f60740bc3e3ef3d99202eabf3d86c
+repositories/report_repository.py                                 11847 1553beadf2add1f85fe8a5f0271114aab485be6f47c3160bdca4a0a1902f4636
+services/report_service.py                                        13179 7e0e56a5b4e69be1ee6f36b0b16ae2c02b40f50416dc1dd43c1697034d9cffcd
+tests/test_report_service.py                                      22297 538a0bc4e62ffa3a5a50f04ffa2218f1b4cb5013e1ff2d3f80011c5875a6c789
+docs/PHASE6_B_REPORT.md                                           18053 f06924d75a78086d1970c355610906d8c631ffb1cd37dd3a764dc98042d51a1f
+
+FINAL ARCHIVE RECORDS, EXCLUDING MANIFEST (9)
+----------------------------------------------------------------------------------------
+RELATIVE PATH                                                      SIZE SHA-256
+docs/acceptance/phase6_b_final/PHASE6_B_ACCEPTANCE.json            7171 505a58027ca1e4f2d293ed6ade45104f32a863d703c976435b4267eb85ef215c
+docs/acceptance/phase6_b_final/PHASE6_B_ARCHITECTURE.md            6994 f47e74f8b5d2803a7f5c4bef3a3ed0f6321b2c354b415301f01c21e0284128bd
+docs/acceptance/phase6_b_final/PHASE6_B_ARCHIVE_DIFFERENCE_INVESTIGATION.md    15199 141bb35d1c2ea9f9a8e5dfd7cba539f7e313500c43b3acc060555f51eee0d80a
+docs/acceptance/phase6_b_final/PHASE6_B_DATABASE_INFO.md           3597 badf8a55fda48129b90e7f5dae5a3af71c851c9c4b795f87566f6ff4d9c70901
+docs/acceptance/phase6_b_final/PHASE6_B_EXCEPTION_REGISTER.md      5160 55527854fad1f3dea8c973f0ac6167993418e7fd5eaa83628420a7c0794f0f13
+docs/acceptance/phase6_b_final/PHASE6_B_FINAL_SUMMARY.md           7594 6f74615941f7db29936ca077bb5a68f40a603a7d35babcc79fe612cedbcd963e
+docs/acceptance/phase6_b_final/PHASE6_B_SEAL_DECISION.md           4427 498e0c1cbb8eddb7448578d8bde5b6d5cd3cfd46709506c8d8de6de4e7ab40d6
+docs/acceptance/phase6_b_final/PHASE6_B_TEST_OUTPUT.txt            1438 bbb9072e1ef20e74a64ca1dfd8ba12aa8d217c5d3643a98df8d72c4f7c1edb11
+docs/acceptance/phase6_b_final/PHASE6_B_TEST_REPORT.md             2524 61cc97c1d2a47e8fe96670244fe6aa6bca23190cd9b202050233168307bba950
+
+TOTAL MANIFEST ENTRIES (excluding manifest): 14
+ARCHIVE FILE COUNT (including manifest): 10
+STATUS: sealed_with_recorded_exception

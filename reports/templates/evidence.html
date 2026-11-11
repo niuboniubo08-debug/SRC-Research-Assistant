@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+    <h2>证据记录</h2>
+    <p class="note">本报告只展示证据元数据和状态；本阶段不读取、不嵌入、不渲染原始证据图片，也不展示原始绝对文件路径。</p>
+    {% if view.has_evidence %}
+    {% for item in view.evidence %}
+    <article class="finding">
+        <div class="finding-head">
+            <h3>#{{ item.evidence_id }} · {{ item.title }}</h3>
+            <div><span class="badge">{{ item.type_label }}</span></div>
+        </div>
+        <dl class="facts">
+            <div><dt>关联 Finding</dt><dd>{% if item.has_finding %}#{{ item.finding_id }} · {{ item.finding_title }}{% else %}未关联{% endif %}</dd></div>
+            <div><dt>捕获时间</dt><dd>{{ item.captured_at }}</dd></div>
+            <div><dt>文件名</dt><dd>{{ item.file_name or "—" }}</dd></div>
+            <div><dt>来源</dt><dd>{{ item.source_text or "—" }}</dd></div>
+            <div><dt>SHA-256</dt><dd>{{ item.file_hash or "—" }}</dd></div>
+            <div><dt>文件状态</dt><dd>存在：{{ item.file_exists_text }}；哈希匹配：{{ item.hash_matches_text }}</dd></div>
+        </dl>
+        {% if item.description %}
+        <div class="label">说明</div>
+        <div class="prewrap">{{ item.description }}</div>
+        {% endif %}
+        {% if item.file_status_note %}
+        <p class="note">{{ item.file_status_note }}</p>
+        {% endif %}
+    </article>
+    {% endfor %}
+    {% else %}
+    <p class="empty">当前报告快照中未包含证据记录。该状态不是“没有证据”或“没有风险”的结论。</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>关联漏洞摘要</h2>
+    {% if view.has_findings %}
+    <p class="note">当前报告只列出与证据关联的 {{ view.linked_finding_count }} 条 Finding 摘要；完整 Finding 请见漏洞分析报告或项目综合报告。</p>
+    <table class="table">
+        <thead><tr><th>ID</th><th>标题</th><th>风险</th><th>状态</th></tr></thead>
+        <tbody>
+        {% for finding in view.findings %}
+            <tr>
+                <td>#{{ finding.finding_id }}</td>
+                <td>{{ finding.title }}</td>
+                <td>{{ finding.severity_label }}</td>
+                <td>{{ finding.status_label }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">当前证据没有可展示的关联 Finding 摘要。</p>
+    {% endif %}
+</section>
+{% endblock %}

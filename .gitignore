@@ -1,0 +1,32 @@
+# Python / pytest generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+/pytest-of-*/
+
+# SQLite databases and sidecars
+*.db
+*.db-wal
+*.db-shm
+
+# Runtime logs only
+/storage/logs/*.log
+/storage/logs/*.jsonl
+
+# Generated runtime reports
+/storage/reports/*.html
+
+# Binary backup artifacts
+/backups/
+/storage/backups/
+
+# Secret/environment files
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Investigated ACL-restricted temporary directories
+/storage/_c1_pytest_tmp/
+/storage/tmpv2ziyrtj/
+/tmpcde5t8kh/

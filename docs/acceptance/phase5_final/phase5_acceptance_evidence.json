@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-11-05T03:37:03Z",
+  "phase4_source_db": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\phase4_acceptance\\acceptance.db",
+  "database": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\phase5_acceptance\\acceptance.db",
+  "schema_version": 5,
+  "project_id": 1,
+  "project_name": "第四阶段验收 · requirements",
+  "source_scan": {
+    "scanner": "bandit",
+    "task_id": 4,
+    "status": "completed",
+    "findings": 3,
+    "error": ""
+  },
+  "finding_counts_by_scanner": {
+    "bandit": 3,
+    "pip-audit": 19
+  },
+  "total_findings": 22,
+  "status_counts": {
+    "confirmed": 1,
+    "open": 20,
+    "reviewing": 1
+  },
+  "tasks": [
+    {
+      "task_id": 1,
+      "task_type": "dependency_audit",
+      "status": "completed"
+    },
+    {
+      "task_id": 4,
+      "task_type": "source_audit",
+      "status": "completed"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": 3,
+      "type": "code_snippet",
+      "title": "Bandit 源码片段",
+      "finding_id": 41,
+      "file_name": "",
+      "file_hash": "",
+      "source": "phase5_bandit_acceptance"
+    },
+    {
+      "evidence_id": 2,
+      "type": "dependency_info",
+      "title": "依赖漏洞摘要",
+      "finding_id": 19,
+      "file_name": "",
+      "file_hash": "",
+      "source": "phase4_acceptance"
+    },
+    {
+      "evidence_id": 1,
+      "type": "screenshot",
+      "title": "依赖漏洞验收截图",
+      "finding_id": 19,
+      "file_name": "phase5_evidence_screenshot.png",
+      "file_hash": "d049b0c128fee9f2195887c65b3b1b7acb896f9252142a8561841c0e784e8d64",
+      "source": "phase5_evidence_screenshot.png"
+    }
+  ],
+  "evidence_sha256": {
+    "file": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\phase5_acceptance\\evidence\\project_1\\1062362eb51642dead2aaeffbdd3bacb_phase5_evidence_screenshot.png",
+    "source": "phase5_evidence_screenshot.png",
+    "hash": "d049b0c128fee9f2195887c65b3b1b7acb896f9252142a8561841c0e784e8d64",
+    "expected": "d049b0c128fee9f2195887c65b3b1b7acb896f9252142a8561841c0e784e8d64"
+  },
+  "text_evidence_id": 2,
+  "semgrep": "not run: retained Windows CA-store limitation from phase 3",
+  "network": "no remote targets; phase-5 acceptance only read local data and copied a local file"
+}

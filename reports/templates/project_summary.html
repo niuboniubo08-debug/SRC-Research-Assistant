@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+    <h2>漏洞与风险摘要</h2>
+    {% if view.has_findings %}
+    <p class="note">以下为当前报告快照中的 Finding 记录，不代表对所有潜在漏洞的完整覆盖；详细说明请使用漏洞分析报告。</p>
+    <table class="table">
+        <thead>
+        <tr><th>ID</th><th>标题</th><th>风险</th><th>状态</th><th>类别</th><th>源码位置</th></tr>
+        </thead>
+        <tbody>
+        {% for finding in view.findings %}
+            <tr>
+                <td>#{{ finding.finding_id }}</td>
+                <td>{{ finding.title }}</td>
+                <td>{{ finding.severity_label }}</td>
+                <td>{{ finding.status_label }}</td>
+                <td>{{ finding.category or "—" }}</td>
+                <td>{{ finding.source_path }}{% if finding.line_display != "—" %}:{{ finding.line_display }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">当前报告快照中未包含漏洞记录。该状态不是“系统没有漏洞”的结论；请结合扫描任务、报告警告和已知限制判断。</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>证据摘要</h2>
+    {% if view.has_evidence %}
+    <p class="note">证据图片和原始绝对路径不进入本报告；以下只展示元数据、文件名、哈希和校验状态。</p>
+    <table class="table">
+        <thead>
+        <tr><th>ID</th><th>标题</th><th>类型</th><th>关联 Finding</th><th>文件名</th><th>文件状态</th></tr>
+        </thead>
+        <tbody>
+        {% for item in view.evidence %}
+            <tr>
+                <td>#{{ item.evidence_id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.type_label }}</td>
+                <td>{% if item.has_finding %}#{{ item.finding_id }}{% else %}未关联{% endif %}</td>
+                <td>{{ item.file_name or "—" }}</td>
+                <td>存在：{{ item.file_exists_text }}；哈希匹配：{{ item.hash_matches_text }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">当前报告快照中未包含证据记录。该状态不是“没有证据”或“没有风险”的结论。</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>统计分布</h2>
+    <div class="label">Finding 状态</div>
+    <ul class="count-list">
+        {% for item in view.stats.finding_status_counts %}
+        <li>{{ item.label }}：{{ item.count }}</li>
+        {% endfor %}
+    </ul>
+    <div class="label">证据类型</div>
+    <ul class="count-list">
+        {% for item in view.stats.evidence_type_counts %}
+        <li>{{ item.label }}：{{ item.count }}</li>
+        {% endfor %}
+    </ul>
+    <div class="label">任务状态</div>
+    <ul class="count-list">
+        {% for item in view.stats.task_status_counts %}
+        <li>{{ item.label }}：{{ item.count }}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

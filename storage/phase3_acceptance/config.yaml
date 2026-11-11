@@ -1,0 +1,22 @@
+app:
+  environment: acceptance
+  name: SRC Phase 3 Acceptance
+  version: 0.3.0
+database:
+  path: acceptance.db
+security:
+  allow_redirect_following: false
+  allow_wildcard_scope: false
+  default_remote_access: deny
+  require_exact_remote_match: true
+  require_valid_authorization: true
+storage:
+  evidence: evidence
+  logs: logs
+  projects: projects
+  reports: reports
+  root: .
+ui:
+  theme: dark
+  window_height: 900
+  window_width: 1440

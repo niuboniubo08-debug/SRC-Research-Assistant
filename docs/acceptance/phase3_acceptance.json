@@ -1,0 +1,235 @@
+{
+  "generated_at": "2026-11-05T02:11:59Z",
+  "database": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\phase3_acceptance\\acceptance.db",
+  "project_ids": {
+    "unsafe": 1,
+    "safe": 2
+  },
+  "scanner_infos": {
+    "bandit": {
+      "available": true,
+      "version": "1.9.4",
+      "reason": "",
+      "command": "python -m bandit"
+    },
+    "semgrep": {
+      "available": false,
+      "version": "1.183.0",
+      "reason": "Semgrep 已安装但当前环境无法运行：Fatal error: exception Failure: ca_certs_iter_on_anchors: CertOpenSystemStore returned NULL",
+      "command": "semgrep --version"
+    }
+  },
+  "runs": {
+    "semgrep_only": {
+      "task_id": 1,
+      "status": "failed",
+      "progress": 0,
+      "result_summary": "扫描失败；已保留 0 个结果。完成 0 个扫描器，未发现匹配的安全问题。 跳过 1 个不可用扫描器。 有 1 条提示。",
+      "error_message": "所选扫描器均不可用，未执行扫描",
+      "findings_count": 0,
+      "findings": [],
+      "scanners_run": [],
+      "scanners_skipped": [
+        "semgrep"
+      ],
+      "warnings": [
+        "Semgrep 不可用：Semgrep 已安装但当前环境无法运行：Fatal error: exception Failure: ca_certs_iter_on_anchors: CertOpenSystemStore returned NULL"
+      ],
+      "errors": [
+        "所选扫描器均不可用，未执行扫描"
+      ]
+    },
+    "bandit_safe": {
+      "task_id": 2,
+      "status": "completed",
+      "progress": 100,
+      "result_summary": "完成 1 个扫描器，未发现匹配的安全问题。",
+      "error_message": "",
+      "findings_count": 0,
+      "findings": [],
+      "scanners_run": [
+        "bandit"
+      ],
+      "scanners_skipped": [],
+      "warnings": [],
+      "errors": []
+    },
+    "bandit_unsafe": {
+      "task_id": 3,
+      "status": "completed",
+      "progress": 100,
+      "result_summary": "完成 1 个扫描器，发现 6 个问题。",
+      "error_message": "",
+      "findings_count": 6,
+      "findings": [
+        {
+          "severity": "high",
+          "confidence": "high",
+          "rule_id": "B602",
+          "title": "subprocess call with shell=True identified, security issue.",
+          "file": "unsafe.py",
+          "line": 7,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "medium",
+          "confidence": "high",
+          "rule_id": "B307",
+          "title": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+          "file": "unsafe.py",
+          "line": 6,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "medium",
+          "confidence": "high",
+          "rule_id": "B301",
+          "title": "Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.",
+          "file": "unsafe.py",
+          "line": 11,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "high",
+          "rule_id": "B404",
+          "title": "Consider possible security implications associated with the subprocess module.",
+          "file": "unsafe.py",
+          "line": 1,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "medium",
+          "rule_id": "B105",
+          "title": "Bandit 检测到可能的硬编码凭据。具体值未写入结果。",
+          "file": "unsafe.py",
+          "line": 3,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "high",
+          "rule_id": "B403",
+          "title": "Consider possible security implications associated with pickle module.",
+          "file": "unsafe.py",
+          "line": 10,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        }
+      ],
+      "scanners_run": [
+        "bandit"
+      ],
+      "scanners_skipped": [],
+      "warnings": [],
+      "errors": []
+    },
+    "combined": {
+      "task_id": 4,
+      "status": "completed",
+      "progress": 100,
+      "result_summary": "完成 1 个扫描器，发现 6 个问题。 跳过 1 个不可用扫描器。 有 1 条提示。",
+      "error_message": "",
+      "findings_count": 6,
+      "findings": [
+        {
+          "severity": "high",
+          "confidence": "high",
+          "rule_id": "B602",
+          "title": "subprocess call with shell=True identified, security issue.",
+          "file": "unsafe.py",
+          "line": 7,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "medium",
+          "confidence": "high",
+          "rule_id": "B307",
+          "title": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+          "file": "unsafe.py",
+          "line": 6,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "medium",
+          "confidence": "high",
+          "rule_id": "B301",
+          "title": "Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.",
+          "file": "unsafe.py",
+          "line": 11,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "high",
+          "rule_id": "B404",
+          "title": "Consider possible security implications associated with the subprocess module.",
+          "file": "unsafe.py",
+          "line": 1,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "medium",
+          "rule_id": "B105",
+          "title": "Bandit 检测到可能的硬编码凭据。具体值未写入结果。",
+          "file": "unsafe.py",
+          "line": 3,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        },
+        {
+          "severity": "low",
+          "confidence": "high",
+          "rule_id": "B403",
+          "title": "Consider possible security implications associated with pickle module.",
+          "file": "unsafe.py",
+          "line": 10,
+          "scanner": "bandit",
+          "scanner_version": "1.9.4"
+        }
+      ],
+      "scanners_run": [
+        "bandit"
+      ],
+      "scanners_skipped": [
+        "semgrep"
+      ],
+      "warnings": [
+        "Semgrep 不可用：Semgrep 已安装但当前环境无法运行：Fatal error: exception Failure: ca_certs_iter_on_anchors: CertOpenSystemStore returned NULL"
+      ],
+      "errors": []
+    }
+  },
+  "safety": {
+    "secret_in_findings": false,
+    "semgrep_fabricated_results": false,
+    "safe_scan_completed": true,
+    "safe_scan_findings": 0,
+    "unsafe_scan_completed": true,
+    "combined_completed": true,
+    "project_isolation": {
+      "safe_tasks": 1,
+      "unsafe_tasks": 3,
+      "safe_findings": 0
+    }
+  },
+  "database_counts": {
+    "tasks": 4,
+    "findings": 12
+  },
+  "notes": {
+    "semgrep": "Semgrep is genuinely unavailable in this Windows session: Semgrep 已安装但当前环境无法运行：Fatal error: exception Failure: ca_certs_iter_on_anchors: CertOpenSystemStore returned NULL",
+    "network": "No remote target or Internet scan was used."
+  }
+}

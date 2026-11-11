@@ -1,0 +1,196 @@
+{
+  "generated_at": "2026-11-04T15:06:21Z",
+  "database": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\acceptance\\acceptance.db",
+  "audit_file": "D:\\挖漏洞\\SRC-Research-Assistant\\storage\\acceptance\\logs\\audit.jsonl",
+  "total": 31,
+  "passed": 31,
+  "failed": 0,
+  "steps": [
+    {
+      "section": "项目管理",
+      "name": "1 创建项目",
+      "status": "PASS",
+      "detail": "ID=1, 名称=验收临时项目"
+    },
+    {
+      "section": "项目管理",
+      "name": "2 查询项目",
+      "status": "PASS",
+      "detail": "查询到 #1 验收临时项目"
+    },
+    {
+      "section": "项目管理",
+      "name": "3 修改项目",
+      "status": "PASS",
+      "detail": "名称=验收临时项目（已修改）, 状态=已暂停"
+    },
+    {
+      "section": "项目管理",
+      "name": "4 设置当前项目",
+      "status": "PASS",
+      "detail": "当前项目=#1"
+    },
+    {
+      "section": "项目管理",
+      "name": "5 删除测试项目",
+      "status": "PASS",
+      "detail": "按预期拒绝: NotFoundError: 项目不存在"
+    },
+    {
+      "section": "项目管理",
+      "name": "5b 删除后当前项目清理",
+      "status": "PASS",
+      "detail": "当前项目已清空"
+    },
+    {
+      "section": "数据隔离",
+      "name": "创建项目 A / B",
+      "status": "PASS",
+      "detail": "A=#2, B=#3"
+    },
+    {
+      "section": "授权管理",
+      "name": "1 创建授权（待审核）",
+      "status": "PASS",
+      "detail": "#1, 状态=待审核, 有效=False"
+    },
+    {
+      "section": "授权管理",
+      "name": "2 确认授权",
+      "status": "PASS",
+      "detail": "#1, 有效=True"
+    },
+    {
+      "section": "授权管理",
+      "name": "2b 已确认必须有授权文件",
+      "status": "PASS",
+      "detail": "按预期拒绝: ValidationError: 确认授权必须填写授权文件路径"
+    },
+    {
+      "section": "授权范围",
+      "name": "本地测试项目路径允许",
+      "status": "PASS",
+      "detail": "asset=#1, code=allowed"
+    },
+    {
+      "section": "授权范围",
+      "name": "范围外本地路径拒绝",
+      "status": "PASS",
+      "detail": "code=local_target_not_in_scope"
+    },
+    {
+      "section": "授权范围",
+      "name": "范围内目标正确允许",
+      "status": "PASS",
+      "detail": "example.test=allowed, authorized.example.test=allowed"
+    },
+    {
+      "section": "授权范围",
+      "name": "范围外目标必须拒绝",
+      "status": "PASS",
+      "detail": "target=outside.test, code=target_not_in_scope"
+    },
+    {
+      "section": "授权范围",
+      "name": "未明确登记的子域拒绝",
+      "status": "PASS",
+      "detail": "target=other.example.test, code=target_not_in_scope"
+    },
+    {
+      "section": "授权范围",
+      "name": "通配符资产拒绝",
+      "status": "PASS",
+      "detail": "按预期拒绝: ValidationError: 域名必须是精确主机名，不能包含通配符、协议、端口或路径"
+    },
+    {
+      "section": "授权范围",
+      "name": "过期前允许",
+      "status": "PASS",
+      "detail": "授权窗口至 2026-11-04 23:06"
+    },
+    {
+      "section": "授权范围",
+      "name": "过期授权必须拒绝",
+      "status": "PASS",
+      "detail": "code=authorization_expired, reason=授权已过期，拒绝远程检测"
+    },
+    {
+      "section": "授权管理",
+      "name": "3 过期授权状态落库",
+      "status": "PASS",
+      "detail": "状态=已过期, 本次更新=1"
+    },
+    {
+      "section": "安全绕过",
+      "name": "过期授权不能新建远程资产",
+      "status": "PASS",
+      "detail": "按预期拒绝: ValidationError: 远程资产必须关联当前有效的已确认授权"
+    },
+    {
+      "section": "授权管理",
+      "name": "4 撤销授权",
+      "status": "PASS",
+      "detail": "asset=#5, code=authorization_revoked"
+    },
+    {
+      "section": "授权范围",
+      "name": "已撤销授权必须拒绝",
+      "status": "PASS",
+      "detail": "code=authorization_revoked"
+    },
+    {
+      "section": "数据隔离",
+      "name": "项目 A 不能读取项目 B 的授权",
+      "status": "PASS",
+      "detail": "按预期拒绝: NotFoundError: 授权记录不存在或不属于当前项目"
+    },
+    {
+      "section": "数据隔离",
+      "name": "项目 A 不能读取项目 B 的资产",
+      "status": "PASS",
+      "detail": "按预期拒绝: NotFoundError: 授权资产不存在或不属于当前项目"
+    },
+    {
+      "section": "数据隔离",
+      "name": "项目资产列表隔离",
+      "status": "PASS",
+      "detail": "项目 A 资产数=5, 不包含 B 的 #6"
+    },
+    {
+      "section": "数据隔离",
+      "name": "项目 B 检测不写入项目 A 日志",
+      "status": "PASS",
+      "detail": "A 日志数 22 → 22"
+    },
+    {
+      "section": "数据隔离",
+      "name": "A/B 检测记录集合不相交",
+      "status": "PASS",
+      "detail": "A=22 条, B=4 条, 交集=0"
+    },
+    {
+      "section": "数据隔离",
+      "name": "项目 B 不能使用项目 A 的范围",
+      "status": "PASS",
+      "detail": "target=example.test, code=target_not_in_scope"
+    },
+    {
+      "section": "安全绕过",
+      "name": "URL 不会被当作精确目标",
+      "status": "PASS",
+      "detail": "check_remote_access(URL) 被拒绝"
+    },
+    {
+      "section": "安全绕过",
+      "name": "绕过服务层直接插入资产仍拒绝",
+      "status": "PASS",
+      "detail": "code=missing_authorization"
+    },
+    {
+      "section": "安全绕过",
+      "name": "授权检查不依赖 UI 按钮状态",
+      "status": "PASS",
+      "detail": "直接调用后端服务仍返回拒绝"
+    }
+  ]
+}

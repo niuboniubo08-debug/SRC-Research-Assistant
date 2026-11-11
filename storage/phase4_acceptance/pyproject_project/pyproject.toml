@@ -1,0 +1,5 @@
+[project]
+name = 'phase4-pyproject-example'
+version = '1.0.0'
+requires-python = '>=3.10'
+dependencies = ['requests==2.19.0']
