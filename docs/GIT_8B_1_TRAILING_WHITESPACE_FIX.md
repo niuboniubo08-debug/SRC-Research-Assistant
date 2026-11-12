@@ -1,0 +1,214 @@
+# Git-8B-1：最小 Markdown Trailing Whitespace 修复与重新暂存验证
+
+- 日期：2026-11-12（Asia/Shanghai）
+- 项目：`D:\挖漏洞\SRC-Research-Assistant`
+- 修复性质：最小 Markdown 行尾空白修复
+- 未修改业务代码、测试、数据库、Schema 或 Git 历史
+- 未执行 commit / push
+
+```text
+REPAIR_TYPE = MINIMAL_FORMAT_REPAIR
+BUSINESS_LOGIC_CHANGED = NO
+FACTS_CHANGED = NO
+GIT_8B_1_STATUS = PASS
+COMMIT_SCOPE = APPROVED
+GIT_8C_READINESS = GO
+```
+
+---
+
+## 1. 修复前状态
+
+```text
+STAGED_FILE_COUNT = 13
+STAGED_DIFF_CHECK = FAIL
+STAGED_DIFF_CHECK_EXIT = 2
+TRAILING_WHITESPACE_FINDINGS_BEFORE = 11
+```
+
+问题分布在 3 个报告文件：
+
+```text
+docs/GIT_8A_PRECOMMIT_AUDIT.md
+docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md
+docs/PHASE6_P2B_2_README_UPDATE.md
+```
+
+只读复核确认问题为 Markdown 行尾双空格，不是代码、JSON、配置或数据库内容。
+
+---
+
+## 2. 修复范围
+
+```text
+FILES_MODIFIED = 3
+TRAILING_WHITESPACE_FINDINGS_BEFORE = 11
+TRAILING_WHITESPACE_FINDINGS_AFTER = 0
+ONLY_CONFIRMED_TRAILING_WHITESPACE_REMOVED = YES
+UNRELATED_CONTENT_MODIFIED = NO
+```
+
+实际修改文件：
+
+```text
+docs/GIT_8A_PRECOMMIT_AUDIT.md
+docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md
+docs/PHASE6_P2B_2_README_UPDATE.md
+```
+
+修改位置：
+
+```text
+docs/GIT_8A_PRECOMMIT_AUDIT.md:
+63
+64
+
+docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md:
+21
+110
+117
+118
+206
+207
+253
+254
+
+docs/PHASE6_P2B_2_README_UPDATE.md:
+142
+```
+
+共 11 行，每行只删除行末空格字符。没有改写句子、标题、段落、事实或结论，没有全文件美化，也没有修改其他 Markdown 格式。
+
+### 修改后文件哈希
+
+```text
+docs/GIT_8A_PRECOMMIT_AUDIT.md
+5,660 bytes  sha256=25ca05235a5c2b22b5c68147bedaffcaa762f9d852a99b8b857372444c95a324
+
+docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md
+12,083 bytes  sha256=5679961c1f1ad1e8899ca8422da23daaaf487b16bb5133e9c120a4424aa0e79f
+
+docs/PHASE6_P2B_2_README_UPDATE.md
+4,406 bytes  sha256=d25118d7b19a342241e1621544da513b3b42d1969c94b7027d96ef153990b52f
+```
+
+修复脚本在写入前逐行比较了去除行尾空格后的内容：所有非行尾内容完全相同；未发现 `NON_WHITESPACE_CHANGE`。
+
+---
+
+## 3. 重新暂存
+
+```text
+STAGING_MODE = EXPLICIT_FILE_LIST
+RESTAGED_FILES = 3
+git add . = NOT_USED
+RESTAGE_EXIT_CODE = 0
+```
+
+只执行：
+
+```text
+git add -- docs/GIT_8A_PRECOMMIT_AUDIT.md \
+  docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md \
+  docs/PHASE6_P2B_2_README_UPDATE.md
+```
+
+其他 10 个已经正确暂存的文件没有重新处理。
+
+---
+
+## 4. 最终暂存区
+
+```text
+STAGED_FILE_COUNT = 13
+UNEXPECTED_STAGED_FILES = NONE
+UNSTAGED_FILE_COUNT = 0
+```
+
+`git diff --cached --name-status`：
+
+```text
+M	README.md
+A	docs/GIT_8A_PRECOMMIT_AUDIT.md
+M	docs/PHASE6_C2A_SECURITY_DEBT.md
+A	docs/PHASE6_P2B_1_PREMODIFICATION_VERIFICATION.md
+A	docs/PHASE6_P2B_2_README_UPDATE.md
+A	docs/PHASE6_P2B_3_REPORTS_INIT_UPDATE.md
+A	docs/PHASE6_P2B_4_SECURITY_DEBT_UPDATE.md
+A	docs/PHASE6_P2B_5A_README_STRUCTURE_FIX.md
+A	docs/PHASE6_P2B_5B_REAUDIT.md
+A	docs/PHASE6_P2B_5_CONSISTENCY_AUDIT.md
+A	docs/PHASE6_P2B_6A_FULL_TEST.md
+A	docs/PHASE6_P2B_FINAL_ACCEPTANCE.md
+M	reports/__init__.py
+```
+
+`git diff --cached --stat` 仍为：
+
+```text
+13 files changed, 2218 insertions(+), 10 deletions(-)
+```
+
+行数未变化，说明修复没有增删段落。
+
+---
+
+## 5. 最终 Diff 检查
+
+```text
+STAGED_DIFF_CHECK = PASS
+STAGED_DIFF_CHECK_EXIT = 0
+```
+
+`git diff --cached --check` 已无 trailing whitespace 告警。
+
+### 未修改的 3 个 P2B 实际文档
+
+```text
+README.md
+reports/__init__.py
+docs/PHASE6_C2A_SECURITY_DEBT.md
+```
+
+哈希保持不变：
+
+```text
+README.md                         3013F104E1E826F73ADB0261874664777CCB1B0F421DA36A736F8CE0C024961F
+reports/__init__.py               1A0D3D47FFEE9EE3406EE9EC28EF57EF69FB852463F4DB6EF06E3EE0EFF9B7EB
+docs/PHASE6_C2A_SECURITY_DEBT.md  DF069E504A72DA6788495D359C3213347A55D2544EC9F0D1CFA7531EFAA92765
+```
+
+---
+
+## 6. 报告边界
+
+```text
+GIT_8B_REPORT = NOT_STAGED
+GIT_8B_REPORT_PATH = docs/GIT_8B_STAGING_AUDIT.md
+
+GIT_8B_1_REPORT = NOT_STAGED
+GIT_8B_1_REPORT_PATH = docs/GIT_8B_1_TRAILING_WHITESPACE_FIX.md
+
+COMMIT_CANDIDATE_STAGED_FILES = 13
+```
+
+Git-8B 报告和本 Git-8B-1 报告都保持未暂存，等待人工审核。
+
+---
+
+## 7. 最终状态
+
+```text
+GIT_8B_1_STATUS = PASS
+COMMIT_SCOPE = APPROVED
+GIT_8C_READINESS = GO
+
+STAGED_FILE_COUNT = 13
+STAGED_DIFF_CHECK = PASS
+STAGED_DIFF_CHECK_EXIT = 0
+UNEXPECTED_STAGED_FILES = NONE
+GIT_COMMIT = NOT_EXECUTED
+GIT_PUSH = NOT_EXECUTED
+```
+
+本步骤只修改了 3 个已确认的报告文件中的 11 处行尾空格；未修改 README、`reports/__init__.py`、`SECURITY_DEBT`、生产代码、测试、数据库或 Schema；未执行 commit 或 push，未开始下一阶段。
