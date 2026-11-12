@@ -670,7 +670,7 @@ except ValueError as exc:
 3. 定义“安全证据完整性”和“隐私脱敏”的优先级；
 4. 验证遮盖后报告仍可用于复现；
 5. 验证用户确认/审计记录；
-6. 评估 PDF/JSON 导出是否沿用同一策略（C2B 之后）。
+6. PDF 导出已取消，不再作为后续评估项；JSON 报告导出是独立决策且尚未获批，不与 SubmissionDraft JSON persistence 混同。
 
 ### 10.6 建议处理阶段
 

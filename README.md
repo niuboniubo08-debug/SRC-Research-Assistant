@@ -159,11 +159,12 @@
 
 ## 本阶段明确未实现
 
+报告能力状态：HTML 报告已实现（Phase 6C-2B）；PDF 报告导出已正式取消，不属于当前项目范围（`ReportFormat.PDF` 兼容元数据仍保留，但不代表导出可用）；JSON 报告导出尚未实施，也未获得实施批准。
+
 以下功能只显示占位页，不能当作已完成功能使用：
 
 - 远程 HTTPS / 安全响应头非破坏性检测；
 - 外部漏洞记录批量导入；
-- HTML / PDF / JSON 报告；
 - Windows EXE 打包。
 
 Semgrep 的实际运行状态在当前环境为不可用；其扫描器、规则和解析代码已完成，但不会伪造扫描结果。其他扫描器功能已由 Bandit 实际验证。
@@ -289,7 +290,7 @@ SRC-Research-Assistant/
 ├── repositories/           # 第五阶段漏洞与证据 SQL Repository
 ├── ui/                     # 主窗口、主题、10 个页面
 ├── scanners/               # 统一接口、Bandit、Semgrep、pip-audit、本地规则
-├── reports/                # 后续报告边界（未启用）
+├── reports/                # HTML 报告导出
 ├── storage/                # 主库、第三/四/五阶段验收库、证据、日志
 ├── tests/                  # pytest 测试
 ├── tools/                  # 验收、截图、扫描、备份工具
@@ -330,10 +331,9 @@ ca_certs_iter_on_anchors: CertOpenSystemStore returned NULL
 
 ## 下一阶段建议
 
-1. 实现 HTML/PDF/JSON 报告，并复用第五阶段漏洞/证据关联。
-2. 实现远程非破坏性配置检查，必须先展示目标、检测方式和授权状态，并强制通过 `require_remote_access`。
-3. 在 Linux/WSL 完成 Semgrep 实际运行验证。
-4. Windows EXE 打包放在功能稳定后。
-5. 保留 pip-audit 当前 severity/affected range 已知限制，不擅自改写；如需 CVSS，应单独设计经过验证的补充来源。
+1. 实现远程非破坏性配置检查，必须先展示目标、检测方式和授权状态，并强制通过 `require_remote_access`。
+2. 在 Linux/WSL 完成 Semgrep 实际运行验证。
+3. Windows EXE 打包放在功能稳定后。
+4. 保留 pip-audit 当前 severity/affected range 已知限制，不擅自改写；如需 CVSS，应单独设计经过验证的补充来源。
 
-第五阶段在此停止，不进入报告模块；等待用户审查第五阶段验收结果。
+第五阶段在此停止，不进入报告模块；这是 Phase 5 当时的历史状态。Phase 6 后续已实现 HTML 报告能力（PDF 导出已取消，JSON 未实施/未批准）。等待用户审查第五阶段验收结果。
