@@ -288,7 +288,9 @@ REAL_PIP_AUDIT_EXECUTED = NO
 | 三项技术限制接受 | 项目负责人在本次对话中明确接受 |
 | 草案创建授权 | 已授权并完成 DRAFT 创建 |
 | 正式关闭授权 | 项目负责人已明确批准 RC-01 正式关闭 |
-| 批准时间 | `2026-11-14T20:00+08:00`（Asia/Shanghai，以本记录定稿时间为准） |
+| 批准日期 | `2026-11-14`（Asia/Shanghai） |
+| 批准时间 | `NOT_PRECISELY_RECORDED`；精确消息时间未独立记录 |
+| 正式关闭记录定稿时间 | `2026-11-14T20:00+08:00`（Asia/Shanghai） |
 | 批准人姓名/签名 | 未提供；不得补造；仅记录会话身份 |
 
 ### 12.2 ChatGPT 技术审核
@@ -350,9 +352,11 @@ CURRENT_FORMAL_CLOSURE_RECORD_STATUS = CLOSED
 ```text
 APPROVED_BY = 项目负责人（会话身份；姓名未提供）
 APPROVAL_ROLE = PROJECT_OWNER
-APPROVAL_TIME = 2026-11-14T20:00+08:00
+APPROVAL_DATE = 2026-11-14
+APPROVAL_TIME = NOT_PRECISELY_RECORDED
 APPROVAL_TIME_ZONE = Asia/Shanghai
-APPROVAL_TIME_BASIS = 本正式关闭记录定稿时间
+APPROVAL_TIME_BASIS = 会话明确批准日期已确认，精确消息时间未独立记录
+FORMALIZED_AT = 2026-11-14T20:00+08:00
 APPROVAL_SCOPE = RC-01 technical acceptance and accepted residual limitations
 APPROVAL_REFERENCE = 项目负责人在 ChatGPT 会话中的明确书面批准
 APPROVAL_DECISION = APPROVED
@@ -391,12 +395,13 @@ docs/P6_ACCEPT_01C_A_CLOSURE_READINESS_REVIEW.md
 ```text
 DRAFT_CREATED_AT = 2026-11-14（Asia/Shanghai）
 DRAFT_CREATED_BY = AGENT_UNDER_SESSION_AUTHORIZATION
-FINAL_APPROVAL_TIME = 2026-11-14T20:00+08:00
+APPROVAL_DATE = 2026-11-14
+FINAL_APPROVAL_TIME = NOT_PRECISELY_RECORDED
 FORMALIZED_AT = 2026-11-14T20:00+08:00
 FORMALIZED_BY = AGENT_UNDER_PROJECT_OWNER_AUTHORIZATION
 ```
 
-草案创建时间不是人工批准时间。正式关闭记录的批准时间以本次定稿时间为准，并已标注 Asia/Shanghai 时区。
+批准日期已确认；批准消息的精确时间没有独立记录，不得补造。正式关闭记录定稿时间单独保留为 `2026-11-14T20:00+08:00`（Asia/Shanghai），不得将两者混同。
 
 ## 16. 正式关闭声明
 
