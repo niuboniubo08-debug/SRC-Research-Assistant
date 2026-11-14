@@ -1,17 +1,19 @@
-# STATUS: DRAFT
+# STATUS = APPROVED
 
-# P6-ACCEPT-01C-B — RC-01 正式关闭记录草案
+# P6-ACCEPT-01C-B — RC-01 正式关闭记录
 
 ```text
-RC01_CLOSURE_DECISION = NOT_YET_APPROVED
-RC01_FORMAL_CLOSURE = NOT_CLOSED
-HUMAN_FINAL_CLOSURE_APPROVAL = PENDING
-RECORD_VERSION = 0.1-DRAFT
+STATUS = APPROVED
+RC01_CLOSURE_DECISION = APPROVED
+RC01_FORMAL_CLOSURE = CLOSED
+HUMAN_FINAL_CLOSURE_APPROVAL = APPROVED
+CURRENT_FORMAL_CLOSURE_RECORD_STATUS = CLOSED
+RECORD_VERSION = 1.0-APPROVED
 ```
 
-> 本文件是待人工审核的关闭记录草案，不是正式关闭决定。
-> 它记录已完成的 RC-01 技术证据、已接受的三项残余验证限制，以及尚待人工批准的关闭决定。
-> 不得把本草案表述为 RC-01 已正式关闭，也不得据此宣称 Phase 6 已完成。
+> 本文件是已按项目负责人正式授权定稿的 RC-01 正式关闭记录。
+> 它记录 RC-01 的技术证据、已接受的三项残余验证限制、正式批准依据和关闭结论。
+> RC-01 正式关闭不等于 Phase 6 整体完成，也不代表其他阶段或功能自动通过。
 
 ## 1. 项目与 Issue 标识
 
@@ -22,10 +24,10 @@ RECORD_VERSION = 0.1-DRAFT
 | Issue ID | RC-01 |
 | Issue 标题 | pip-audit 不完整审计被错误标记为 COMPLETED（假成功/假“无漏洞”） |
 | 问题类别 | 扫描结果真实性、审计完整性、失败关闭 |
-| 当前记录状态 | `DRAFT` |
-| 记录版本 | `0.1-DRAFT` |
-| 正式关闭状态 | `NOT_CLOSED` |
-| 人工最终批准 | `PENDING` |
+| 当前记录状态 | `APPROVED` |
+| 记录版本 | `1.0-APPROVED` |
+| 正式关闭状态 | `CLOSED` |
+| 人工最终批准 | `APPROVED` |
 
 ## 2. RC-01 问题背景
 
@@ -49,37 +51,44 @@ RC-01 的修复目标是：
 
 ## 3. 当前 Git 状态与基线
 
-### 3.1 执行前只读读取结果
+### 3.1 定稿前只读读取结果
 
 ```text
 BRANCH = main
-HEAD = b3ae705b857ef7f722f4a8640529b2ce4eb41076
-HEAD_SUBJECT = docs: add RC-01 closure readiness and approval review
-WORKTREE_AT_START = CLEAN
+HEAD = de4a639971e790264798db3bf02cf9b5ce8b18b4
+HEAD_SUBJECT = docs: add RC-01 post-commit verification report
+LATEST_COMMIT_TIME = 2026-11-14T19:55:49+08:00
+TASK_STATED_HEAD = 6e615db12ef5019295de2e8b2343756e4cc2e572
+HEAD_DRIFT = ONE_DOCS_ONLY_COMMIT
+WORKTREE_AT_C1_START = CLEAN
 STAGED = 0
 UNSTAGED = 0
-UNTRACKED_AT_START = 0
-COMMIT_COUNT = 13
+UNTRACKED_AT_C1_START = 0
 ```
 
-历史任务说明给出的 HEAD 是 `79c58bb...`，实际 HEAD 已前进到 `b3ae705...`。实际差异为：
+任务说明给出的 `6e615db...` 已被项目负责人后续提交的 C1 核验报告推进到 `de4a639...`。差异是文档提交，不是生产代码或测试变更：
 
 ```text
-b3ae705 docs: add RC-01 closure readiness and approval review
-1 file changed, 489 insertions(+)
-A docs/P6_ACCEPT_01C_A_CLOSURE_READINESS_REVIEW.md
+LATEST_VERIFIED_COMMIT = de4a639971e790264798db3bf02cf9b5ce8b18b4
+COMMIT_SUBJECT = docs: add RC-01 post-commit verification report
+COMMIT_FILES:
+A docs/P6_ACCEPT_01C_C1_POST_COMMIT_VERIFICATION.md
+PRIOR_C1_VERIFIED_COMMIT = 6e615db12ef5019295de2e8b2343756e4cc2e572
 ```
 
-该提交只新增 01C-A 复核报告，不包含生产代码、测试、数据库、Schema 或配置。
+该提交只新增 C1 提交后核验报告。C2 定稿发生在该提交之后，不包含在该提交中；没有虚构新的 commit hash。
 
 ### 3.2 关闭记录基线
 
 ```text
-CLOSURE_BASELINE_HEAD = b3ae705b857ef7f722f4a8640529b2ce4eb41076
-CLOSURE_BASELINE_SUBJECT = docs: add RC-01 closure readiness and approval review
+CLOSURE_BASELINE_HEAD = de4a639971e790264798db3bf02cf9b5ce8b18b4
+CLOSURE_BASELINE_SUBJECT = docs: add RC-01 post-commit verification report
+PRIOR_C1_VERIFIED_COMMIT = 6e615db12ef5019295de2e8b2343756e4cc2e572
+C2_FINALIZATION_AFTER_LATEST_COMMIT = YES
+C2_RECORD_IN_LATEST_COMMIT = NO
 ```
 
-如果本草案后续被人工批准并提交，正式记录应使用批准当时的实际 HEAD，而不是机械沿用本草案创建时的 HEAD。
+本记录基于实际已核验的最新人工提交定稿。C2 定稿产生的文件修改不改变上述提交 hash，也不声称该提交已包含本记录。
 
 ## 4. RC-01 代码与测试提交
 
@@ -277,10 +286,10 @@ REAL_PIP_AUDIT_EXECUTED = NO
 | 项目 | 记录 |
 |---|---|
 | 三项技术限制接受 | 项目负责人在本次对话中明确接受 |
-| 草案创建授权 | 已授权，仅限创建 DRAFT |
-| 正式关闭授权 | 未授权 |
-| 授权时间 | 会话时间可追溯，但未提供精确审批时间；不得补造 |
-| 授权人姓名/签名 | 未提供；不得补造 |
+| 草案创建授权 | 已授权并完成 DRAFT 创建 |
+| 正式关闭授权 | 项目负责人已明确批准 RC-01 正式关闭 |
+| 批准时间 | `2026-11-14T20:00+08:00`（Asia/Shanghai，以本记录定稿时间为准） |
+| 批准人姓名/签名 | 未提供；不得补造；仅记录会话身份 |
 
 ### 12.2 ChatGPT 技术审核
 
@@ -297,24 +306,25 @@ CHATGPT_REVIEW_IS_REPOSITORY_APPROVAL = NO
 ```text
 REPOSITORY_HUMAN_APPROVAL_RECORD = NOT_FOUND
 PRE_EXISTING_REPOSITORY_FORMAL_CLOSURE_RECORD = NOT_FOUND
-CURRENT_FORMAL_CLOSURE_RECORD_STATUS = DRAFT
+CURRENT_FORMAL_CLOSURE_RECORD_STATUS = CLOSED
 ```
 
-01B 与 01C_PRE 已记录：仓库内没有独立人工批准/正式关闭记录，聊天中的表述此前不能替代仓库记录。
+01B 与 01C_PRE 已记录：仓库内没有独立人工批准/正式关闭记录。本次正式关闭以项目负责人在会话中的明确书面批准为依据；该来源与“仓库内独立批准记录”分开记录，不虚构历史审批文件。
 
 ### 12.4 本次记录如何处理这个差异
 
-本草案明确区分：
+本记录明确区分：
 
 ```text
 SESSION_ACCEPTANCE_OF_LIMITATIONS = PRESENT
 SESSION_AUTHORIZATION_FOR_DRAFT = PRESENT
 SESSION_REPORTED_TECHNICAL_REVIEW = PRESENT
+SESSION_AUTHORIZATION_FOR_FORMAL_CLOSURE = PRESENT
 REPOSITORY_INDEPENDENT_APPROVAL = NOT_FOUND
-FORMAL_CLOSURE_AUTHORIZATION = NOT_GRANTED
+FORMAL_CLOSURE_AUTHORIZATION = GRANTED
 ```
 
-正式批准栏保持空白/待审批，不把会话来源自动升级为仓库正式批准。
+正式批准依据是会话来源的明确书面批准，不是仓库内独立审批记录；两者不得混同。
 
 ## 13. 残余风险
 
@@ -324,29 +334,43 @@ FORMAL_CLOSURE_AUTHORIZATION = NOT_GRANTED
 4. **测试环境依赖**：完整测试需要 dedicated temp 目录和 full-access 测试进程；普通 workspace-write 可能产生 ACL setup 错误。
 5. **Finding 保存顺序**：valid-but-incomplete 场景保留既有 Finding 映射/保存顺序，保存成功不等于审计成功。
 6. **代码提交范围**：`b90d234` 是综合提交，不是 RC-01-only 提交，关闭记录必须准确说明。
-7. **仓库批准缺口**：独立人工批准记录仍为 `NOT_FOUND`；正式关闭前必须由人工决定是否补记录或接受会话来源例外。
+7. **仓库批准缺口**：独立人工批准记录仍为 `NOT_FOUND`；项目负责人已依据会话中的明确书面批准接受该例外并授权正式关闭，本记录如实保留该差异。
 
-## 14. 正式关闭决定（待审批）
-
-```text
-RC01_CLOSURE_DECISION = NOT_YET_APPROVED
-RC01_FORMAL_CLOSURE = NOT_CLOSED
-HUMAN_FINAL_CLOSURE_APPROVAL = PENDING
-```
-
-待审批栏：
+## 14. 正式关闭决定
 
 ```text
-APPROVED_BY = ____________________
-APPROVAL_ROLE = ___________________
-APPROVAL_TIME = ___________________
-APPROVAL_SCOPE = RC-01 technical acceptance and residual limitations
-APPROVAL_REFERENCE = ______________
-APPROVAL_DECISION = APPROVED / REJECTED / DEFERRED
-APPROVAL_NOTES = __________________
+RC01_CLOSURE_DECISION = APPROVED
+RC01_FORMAL_CLOSURE = CLOSED
+HUMAN_FINAL_CLOSURE_APPROVAL = APPROVED
+CURRENT_FORMAL_CLOSURE_RECORD_STATUS = CLOSED
 ```
 
-在人工填写并审核前，本文件不具备正式关闭效力。
+批准信息：
+
+```text
+APPROVED_BY = 项目负责人（会话身份；姓名未提供）
+APPROVAL_ROLE = PROJECT_OWNER
+APPROVAL_TIME = 2026-11-14T20:00+08:00
+APPROVAL_TIME_ZONE = Asia/Shanghai
+APPROVAL_TIME_BASIS = 本正式关闭记录定稿时间
+APPROVAL_SCOPE = RC-01 technical acceptance and accepted residual limitations
+APPROVAL_REFERENCE = 项目负责人在 ChatGPT 会话中的明确书面批准
+APPROVAL_DECISION = APPROVED
+APPROVAL_BASIS = SESSION_WRITTEN_APPROVAL
+REPOSITORY_INDEPENDENT_APPROVAL_RECORD = NOT_FOUND
+APPROVAL_NOTES = 项目负责人明确批准 RC-01 正式关闭；未声称仓库此前存在独立人工审批记录，也未补造姓名、签名或审批文件。
+```
+
+正式关闭结论：
+
+- RC-01 技术修复已完成；
+- 已有测试证据满足本次接受标准；
+- 已接受的技术限制作为残余风险保留；
+- 项目负责人批准正式关闭；
+- RC-01 正式关闭；
+- 本次关闭不扩大解释为 Phase 6 整体完成。
+
+本记录是既有 DRAFT 的正式定稿，具有正式关闭记录的效力；其中的 DRAFT 历史字段仅用于追溯草案创建过程。
 
 ## 15. 证据文件路径与记录时间
 
@@ -367,21 +391,27 @@ docs/P6_ACCEPT_01C_A_CLOSURE_READINESS_REVIEW.md
 ```text
 DRAFT_CREATED_AT = 2026-11-14（Asia/Shanghai）
 DRAFT_CREATED_BY = AGENT_UNDER_SESSION_AUTHORIZATION
-FINAL_APPROVAL_TIME = UNKNOWN
+FINAL_APPROVAL_TIME = 2026-11-14T20:00+08:00
+FORMALIZED_AT = 2026-11-14T20:00+08:00
+FORMALIZED_BY = AGENT_UNDER_PROJECT_OWNER_AUTHORIZATION
 ```
 
-草案创建时间不是人工批准时间，也不是正式关闭时间。
+草案创建时间不是人工批准时间。正式关闭记录的批准时间以本次定稿时间为准，并已标注 Asia/Shanghai 时区。
 
-## 16. 草案声明
+## 16. 正式关闭声明
 
 ```text
-RECORD_STATUS = DRAFT
-DRAFT_ONLY = YES
-FORMAL_CLOSURE_EFFECT = NONE
-RC01_CLOSURE_DECISION = NOT_YET_APPROVED
-RC01_FORMAL_CLOSURE = NOT_CLOSED
-HUMAN_FINAL_CLOSURE_APPROVAL = PENDING
-P6_ACCEPT_01C_B_STATUS = DRAFT_CREATED
+RECORD_STATUS = APPROVED
+DRAFT_ONLY = NO
+FORMAL_CLOSURE_EFFECT = ACTIVE
+RC01_CLOSURE_DECISION = APPROVED
+RC01_FORMAL_CLOSURE = CLOSED
+HUMAN_FINAL_CLOSURE_APPROVAL = APPROVED
+CURRENT_FORMAL_CLOSURE_RECORD_STATUS = CLOSED
+P6_ACCEPT_01C_B_STATUS = FORMALIZED
+PHASE6_OVERALL_COMPLETION = NOT_DECLARED
 ```
 
-本草案等待项目负责人和后续独立审核。未经人工批准，不得将 RC-01 标记为正式关闭，不得将本文件作为已生效的关闭决定使用。
+RC-01 已正式关闭。
+
+本记录不代表 Phase 6 整体完成，也不代表其他阶段、其他功能或所有残余风险均已通过。仓库内独立人工批准记录仍为 `NOT_FOUND`；本次批准的来源是项目负责人在 ChatGPT 会话中的明确书面批准，已按会话来源单独记录。
