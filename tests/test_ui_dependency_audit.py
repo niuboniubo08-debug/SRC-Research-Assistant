@@ -47,7 +47,29 @@ class UiFakeScanner(BaseScanner):
         )
         return ScanOutput(
             findings=(finding,),
-            metadata={"audited_dependencies": 2},
+            metadata={
+                "audited_dependencies": 2,
+                "skipped_dependencies": 0,
+                "total_dependencies": 2,
+            },
+        )
+
+
+class UiIncompleteScanner(BaseScanner):
+    name = "pip-audit"
+    display_name = "pip-audit"
+
+    def is_available(self, refresh: bool = False) -> ScannerAvailability:
+        return ScannerAvailability(True, "2.10.1", command="pip-audit")
+
+    def scan(self, target: str | Path, options: ScanOptions) -> ScanOutput:
+        return ScanOutput(
+            findings=(),
+            metadata={
+                "audited_dependencies": 1,
+                "skipped_dependencies": 1,
+                "total_dependencies": 2,
+            },
         )
 
 
@@ -143,4 +165,59 @@ def test_dependency_page_runs_fake_pip_audit_and_displays_result(
     assert "requests" in page.detail_title.text()
     assert "CVE-UI-1" in page.detail_meta.text()
     assert "PYSEC-UI-1" in page.detail_meta.text()
+    window.close()
+
+
+def test_incomplete_dependency_audit_does_not_claim_no_vulnerabilities(
+    qtbot, tmp_path: Path
+) -> None:
+    from PySide6.QtWidgets import QApplication
+
+    apply_theme(QApplication.instance())
+    source = tmp_path / "project-incomplete"
+    source.mkdir()
+    (source / "requirements.txt").write_text(
+        "# test\nrequests==2.19.0\nsafe-package==1.0\n", encoding="utf-8"
+    )
+    context = _context(tmp_path)
+    project = context.project_service.create_project(
+        "UI 不完整依赖审计", "local_audit", "UI 集成测试", str(source), "active"
+    )
+    context.scope_service.create_asset(
+        project.project_id,
+        asset_type="local_project",
+        asset_value=str(source),
+    )
+    fake_service = DependencyAuditService(
+        context.database,
+        context.audit,
+        context.scope_validator,
+        context.project_service,
+        UiIncompleteScanner(),
+        work_dir=context.config.storage_root / "tmp" / "ui-pip-audit-incomplete",
+        clock=context.clock,
+    )
+    context.dependency_service = fake_service
+    state = AppState(context.project_service)
+    state.set_active_project(project.project_id)
+    window = MainWindow(context, state)
+    qtbot.addWidget(window)
+    window.show()
+    window.navigate("dependencies")
+    page = window.dependency_page
+    page.refresh_all()
+    qtbot.waitUntil(lambda: page.start_button.isEnabled(), timeout=15000)
+
+    page.start_button.click()
+    qtbot.waitUntil(
+        lambda: (
+            page._task is not None  # noqa: SLF001
+            and page._task.status in {ScanTaskStatus.COMPLETED, ScanTaskStatus.FAILED}
+            and not page._busy  # noqa: SLF001
+        ),
+        timeout=20000,
+    )
+    assert page._task is not None  # noqa: SLF001
+    assert page._task.status is ScanTaskStatus.FAILED  # noqa: SLF001
+    assert "未发现已知依赖漏洞" not in page.empty_label.text()
     window.close()

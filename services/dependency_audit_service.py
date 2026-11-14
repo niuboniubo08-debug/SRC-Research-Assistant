@@ -9,6 +9,7 @@ import threading
 import tomllib
 import uuid
 from contextlib import contextmanager
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Callable, Iterator, Sequence
@@ -322,8 +323,9 @@ class DependencyAuditService:
                 (), (), (f"依赖审计内部错误：{exc}",), 0, (), progress=100,
             )
 
-        audited = int(output.metadata.get("audited_dependencies") or 0)
-        if audited == 0:
+        try:
+            audited, skipped, total = self._validate_statistics(output.metadata)
+        except ValidationError as exc:
             return self._finish(
                 discovery,
                 selected,
@@ -331,11 +333,39 @@ class DependencyAuditService:
                 ScanTaskStatus.FAILED,
                 (),
                 output.warnings,
-                ("pip-audit 未审计到任何依赖，不能判定为无漏洞",),
+                (f"依赖审计统计非法：{exc}",),
                 0,
                 (),
                 progress=100,
             )
+        except Exception as exc:  # noqa: BLE001 - terminal status must be durable
+            return self._finish(
+                discovery,
+                selected,
+                task_id,
+                ScanTaskStatus.FAILED,
+                (),
+                output.warnings,
+                (f"依赖审计统计校验异常：{exc}",),
+                0,
+                (),
+                progress=100,
+            )
+
+        incomplete_reason = ""
+        if skipped > 0:
+            incomplete_reason = (
+                f"pip-audit 审计不完整：总计 {total}，"
+                f"已审计 {audited}，跳过 {skipped}；"
+                "不判定为无漏洞"
+            )
+        elif audited != total:
+            # Defensive check: unreachable while the sum invariant holds.
+            incomplete_reason = (
+                "pip-audit 审计统计关系异常："
+                f"总计 {total}，已审计 {audited}，跳过 {skipped}"
+            )
+
         try:
             mapped = self._map_findings(discovery, selected, output.findings)
             saved = self._save_findings(discovery.project_id, task_id, mapped)
@@ -352,6 +382,21 @@ class DependencyAuditService:
                 (),
                 progress=100,
             )
+
+        if incomplete_reason:
+            return self._finish(
+                discovery,
+                selected,
+                task_id,
+                ScanTaskStatus.FAILED,
+                tuple(saved),
+                output.warnings,
+                (incomplete_reason,),
+                audited,
+                (),
+                progress=100,
+            )
+
         warnings = list(output.warnings)
         summary = (
             f"已审计 {audited} 个依赖，发现 {len(saved)} 个唯一漏洞。"
@@ -371,6 +416,41 @@ class DependencyAuditService:
             progress=100,
             summary=summary,
         )
+
+    def _validate_statistics(self, metadata: object) -> tuple[int, int, int]:
+        """Validate dependency-audit statistics metadata.
+
+        This helper is intentionally not connected to ``run_audit`` in this
+        step.  It validates the approved three-field contract and returns
+        ``(audited, skipped, total)``.
+        """
+        if not isinstance(metadata, Mapping):
+            raise ValidationError("依赖审计统计 metadata 必须是 Mapping")
+        fields = (
+            "audited_dependencies",
+            "skipped_dependencies",
+            "total_dependencies",
+        )
+        values: dict[str, int] = {}
+        for field in fields:
+            if field not in metadata:
+                raise ValidationError(f"依赖审计统计缺少字段：{field}")
+            value = metadata[field]
+            if type(value) is not int:
+                raise ValidationError(f"依赖审计统计字段类型非法：{field} 必须为 int")
+            if value < 0:
+                raise ValidationError(f"依赖审计统计字段不能为负数：{field}")
+            values[field] = value
+        audited = values["audited_dependencies"]
+        skipped = values["skipped_dependencies"]
+        total = values["total_dependencies"]
+        if total <= 0:
+            raise ValidationError("依赖审计统计 total_dependencies 必须大于 0")
+        if audited + skipped != total:
+            raise ValidationError(
+                "依赖审计统计不完整：audited_dependencies + skipped_dependencies 必须等于 total_dependencies"
+            )
+        return audited, skipped, total
 
     def _select_file(
         self, discovery: DependencyDiscovery, requested: str | Path | None

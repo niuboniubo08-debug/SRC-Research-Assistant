@@ -75,7 +75,7 @@ def test_pip_audit_json_parsing_dedupes_and_maps_metadata(
     target = tmp_path / "requirements.txt"
     target.write_text("requests==2.19.0\n", encoding="utf-8")
     findings, warnings, audited = scanner.parse_output(payload, target, "2.10.1")
-    assert audited == 3
+    assert audited == 2
     assert len(findings) == 2, "duplicate advisory IDs must be deduplicated"
     first = findings[0]
     assert first.title.startswith("requests 2.19.0")
@@ -92,6 +92,119 @@ def test_pip_audit_json_parsing_dedupes_and_maps_metadata(
     assert "failed to resolve" in " ".join(warnings)
     assert first.scanner_name == "pip-audit"
     assert first.scanner_version == "2.10.1"
+
+
+def _scan_with_dependencies(
+    monkeypatch, tmp_path: Path, dependencies: list[dict[str, object]]
+):
+    scanner = make_scanner(tmp_path)
+    target = tmp_path / "requirements.txt"
+    target.write_text("requests==2.19.0\n", encoding="utf-8")
+    payload = json.dumps({"dependencies": dependencies, "fixes": []})
+    monkeypatch.setattr(
+        scanner,
+        "is_available",
+        lambda refresh=False: ScannerAvailability(True, "2.10.1"),
+    )
+    monkeypatch.setattr(scanner, "_executable", lambda: "pip-audit")
+    monkeypatch.setattr(
+        "scanners.pip_audit_scanner.run_command",
+        lambda *_args, **_kwargs: CommandResult(
+            command=("pip-audit",),
+            returncode=0,
+            stdout=payload,
+            stderr="",
+            duration_seconds=0.1,
+        ),
+    )
+    return scanner.scan(target, ScanOptions(timeout_seconds=5))
+
+
+def test_pip_audit_scan_metadata_complete_without_vulnerabilities(
+    monkeypatch, tmp_path: Path
+) -> None:
+    output = _scan_with_dependencies(
+        monkeypatch,
+        tmp_path,
+        [{"name": "safe-package", "version": "1.0.0", "vulns": []}],
+    )
+    assert output.findings == ()
+    assert output.metadata["audited_dependencies"] == 1
+    assert output.metadata["skipped_dependencies"] == 0
+    assert output.metadata["total_dependencies"] == 1
+
+
+def test_pip_audit_scan_metadata_complete_with_vulnerabilities(
+    monkeypatch, tmp_path: Path
+) -> None:
+    output = _scan_with_dependencies(
+        monkeypatch,
+        tmp_path,
+        [
+            {
+                "name": "requests",
+                "version": "2.19.0",
+                "vulns": [{"id": "PYSEC-SCAN-1", "fix_versions": ["2.20.0"]}],
+            }
+        ],
+    )
+    assert len(output.findings) == 1
+    assert output.metadata["audited_dependencies"] == 1
+    assert output.metadata["skipped_dependencies"] == 0
+    assert output.metadata["total_dependencies"] == 1
+
+
+def test_pip_audit_scan_metadata_partial_skip(monkeypatch, tmp_path: Path) -> None:
+    output = _scan_with_dependencies(
+        monkeypatch,
+        tmp_path,
+        [
+            {
+                "name": "requests",
+                "version": "2.19.0",
+                "vulns": [{"id": "PYSEC-SCAN-1", "fix_versions": ["2.20.0"]}],
+            },
+            {"name": "safe-package", "version": "1.0.0", "vulns": []},
+            {
+                "name": "skipped-package",
+                "version": "0.1",
+                "vulns": [],
+                "skip_reason": "failed to resolve",
+            },
+        ],
+    )
+    assert len(output.findings) == 1
+    assert output.metadata["audited_dependencies"] == 2
+    assert output.metadata["skipped_dependencies"] == 1
+    assert output.metadata["total_dependencies"] == 3
+    assert "failed to resolve" in " ".join(output.warnings)
+
+
+def test_pip_audit_scan_metadata_all_skipped(monkeypatch, tmp_path: Path) -> None:
+    output = _scan_with_dependencies(
+        monkeypatch,
+        tmp_path,
+        [
+            {
+                "name": "first-skipped",
+                "version": "1.0",
+                "vulns": [],
+                "skip_reason": "failed to resolve",
+            },
+            {
+                "name": "second-skipped",
+                "version": "2.0",
+                "vulns": [],
+                "skip_reason": "index unavailable",
+            },
+        ],
+    )
+    assert output.findings == ()
+    assert output.metadata["audited_dependencies"] == 0
+    assert output.metadata["skipped_dependencies"] == 2
+    assert output.metadata["total_dependencies"] == 2
+    assert "failed to resolve" in " ".join(output.warnings)
+    assert "index unavailable" in " ".join(output.warnings)
 
 
 def test_pip_audit_empty_result(tmp_path: Path) -> None:

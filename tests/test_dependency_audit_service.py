@@ -65,6 +65,9 @@ class FakePipAuditScanner(BaseScanner):
         error: Exception | None = None,
         cancel_on_scan: bool = False,
         audited: int = 3,
+        skipped: int = 0,
+        total: int | None = None,
+        raw_metadata: dict[str, object] | None = None,
         warnings: tuple[str, ...] = (),
     ) -> None:
         super().__init__()
@@ -74,6 +77,9 @@ class FakePipAuditScanner(BaseScanner):
         self._error = error
         self._cancel_on_scan = cancel_on_scan
         self._audited = audited
+        self._skipped = skipped
+        self._total = audited + skipped if total is None else total
+        self._raw_metadata = raw_metadata
         self._warnings = warnings
         self.captured_target: Path | None = None
         self.captured_content = ""
@@ -92,10 +98,19 @@ class FakePipAuditScanner(BaseScanner):
             raise ScanCancelled("user cancelled")
         if self._error is not None:
             raise self._error
+        metadata = (
+            dict(self._raw_metadata)
+            if self._raw_metadata is not None
+            else {
+                "audited_dependencies": self._audited,
+                "skipped_dependencies": self._skipped,
+                "total_dependencies": self._total,
+            }
+        )
         return ScanOutput(
             findings=self._findings,
             warnings=self._warnings,
-            metadata={"audited_dependencies": self._audited},
+            metadata=metadata,
         )
 
 
@@ -177,7 +192,9 @@ def test_completed_dependency_audit_persists_finding_and_metadata(
     (local_source / "requirements.txt").write_text(
         "# dependency\nrequests==2.19.0\n", encoding="utf-8"
     )
-    scanner = FakePipAuditScanner(findings=(make_finding(),), audited=3)
+    scanner = FakePipAuditScanner(
+        findings=(make_finding(),), audited=3, skipped=0, total=3
+    )
     service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
     progress = []
     outcome = service.run_audit(
@@ -210,7 +227,12 @@ def test_empty_dependency_result_is_completed(
     ensure_asset(scopes, local_project, local_source)
     (local_source / "requirements.txt").write_text("safe-package==1.0\n", encoding="utf-8")
     service = make_service(
-        db, audit, scope_validator, projects, FakePipAuditScanner(findings=(), audited=1), tmp_path
+        db,
+        audit,
+        scope_validator,
+        projects,
+        FakePipAuditScanner(findings=(), audited=1, skipped=0, total=1),
+        tmp_path,
     )
     outcome = service.run_audit(local_project.project_id)
     assert outcome.success is True
@@ -234,7 +256,183 @@ def test_zero_audited_dependencies_is_failure_not_success(
     outcome = service.run_audit(local_project.project_id)
     assert outcome.failed is True
     assert outcome.success is False
-    assert "未审计到任何依赖" in outcome.task.error_message
+    assert "依赖审计统计非法" in outcome.task.error_message
+    assert "total_dependencies 必须大于 0" in outcome.task.error_message
+
+
+def test_partial_skipped_dependency_audit_fails_without_success_summary(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\nsafe-package==1.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(make_finding(),),
+        audited=1,
+        skipped=1,
+        total=2,
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    outcome = service.run_audit(local_project.project_id)
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert outcome.success is False
+    assert outcome.failed is True
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
+
+
+def test_all_skipped_dependency_audit_fails_without_success(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "first-skipped==1.0\nsecond-skipped==2.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(),
+        audited=0,
+        skipped=2,
+        total=2,
+        warnings=("first-skipped 未完成审计：failed to resolve",),
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    outcome = service.run_audit(local_project.project_id)
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert outcome.success is False
+    assert outcome.failed is True
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
+
+
+def test_missing_dependency_statistics_fail_closed(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "safe-package==1.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(),
+        raw_metadata={"audited_dependencies": 2},
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    outcome = service.run_audit(local_project.project_id)
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert outcome.success is False
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
+
+
+def test_inconsistent_dependency_statistics_fail_closed(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "safe-package==1.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(),
+        raw_metadata={
+            "audited_dependencies": 1,
+            "skipped_dependencies": 1,
+            "total_dependencies": 3,
+        },
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    outcome = service.run_audit(local_project.project_id)
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert outcome.success is False
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
+
+
+@pytest.mark.parametrize(
+    "raw_metadata",
+    [
+        pytest.param(
+            {
+                "audited_dependencies": None,
+                "skipped_dependencies": 0,
+                "total_dependencies": 1,
+            },
+            id="audited-none",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": "2",
+                "skipped_dependencies": 0,
+                "total_dependencies": 2,
+            },
+            id="audited-string",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": -1,
+                "skipped_dependencies": 2,
+                "total_dependencies": 1,
+            },
+            id="audited-negative",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": 1,
+                "skipped_dependencies": 0,
+                "total_dependencies": 0,
+            },
+            id="total-zero",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": 2,
+                "skipped_dependencies": -1,
+                "total_dependencies": 2,
+            },
+            id="skipped-negative",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": True,
+                "skipped_dependencies": 0,
+                "total_dependencies": 1,
+            },
+            id="audited-bool",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": 1,
+                "skipped_dependencies": True,
+                "total_dependencies": 2,
+            },
+            id="skipped-bool",
+        ),
+        pytest.param(
+            {
+                "audited_dependencies": 1,
+                "skipped_dependencies": 0,
+                "total_dependencies": True,
+            },
+            id="total-bool",
+        ),
+    ],
+)
+def test_invalid_dependency_statistics_fail_closed(
+    projects,
+    scopes,
+    local_project,
+    local_source,
+    tmp_path,
+    db,
+    audit,
+    scope_validator,
+    raw_metadata,
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "safe-package==1.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(findings=(), raw_metadata=raw_metadata)
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    outcome = service.run_audit(local_project.project_id)
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert outcome.success is False
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
 
 
 def test_pip_audit_unavailable_marks_task_failed_without_findings(
@@ -370,3 +568,304 @@ def test_invalid_pyproject_is_not_auditable(
     assert discovery.primary is None
     assert discovery.files
     assert discovery.files[0].supported is False
+
+
+@pytest.fixture
+def statistics_service(db, audit, scope_validator, projects, tmp_path):
+    return make_service(
+        db, audit, scope_validator, projects, FakePipAuditScanner(), tmp_path
+    )
+
+
+@pytest.mark.parametrize(
+    "metadata",
+    [None, []],
+    ids=["none", "list"],
+)
+def test_validate_statistics_rejects_non_mapping(statistics_service, metadata):
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(metadata)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["audited_dependencies", "skipped_dependencies", "total_dependencies"],
+)
+def test_validate_statistics_rejects_missing_field(statistics_service, field):
+    metadata = {
+        "audited_dependencies": 2,
+        "skipped_dependencies": 0,
+        "total_dependencies": 2,
+    }
+    del metadata[field]
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(metadata)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["audited_dependencies", "skipped_dependencies", "total_dependencies"],
+)
+@pytest.mark.parametrize(
+    "value",
+    [None, True, False, "2", 2.0],
+    ids=["none", "true", "false", "str", "float"],
+)
+def test_validate_statistics_rejects_non_int_types(statistics_service, field, value):
+    metadata = {
+        "audited_dependencies": 2,
+        "skipped_dependencies": 0,
+        "total_dependencies": 2,
+    }
+    metadata[field] = value
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(metadata)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["audited_dependencies", "skipped_dependencies", "total_dependencies"],
+)
+def test_validate_statistics_rejects_negative_fields(statistics_service, field):
+    metadata = {
+        "audited_dependencies": 2,
+        "skipped_dependencies": 0,
+        "total_dependencies": 2,
+    }
+    metadata[field] = -1
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(metadata)
+
+
+def test_validate_statistics_rejects_zero_total(statistics_service):
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(
+            {
+                "audited_dependencies": 0,
+                "skipped_dependencies": 0,
+                "total_dependencies": 0,
+            }
+        )
+
+
+def test_validate_statistics_rejects_sum_mismatch(statistics_service):
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(
+            {
+                "audited_dependencies": 2,
+                "skipped_dependencies": 1,
+                "total_dependencies": 4,
+            }
+        )
+
+
+def test_validate_statistics_rejects_inconsistent_incomplete_total(statistics_service):
+    with pytest.raises(ValidationError):
+        statistics_service._validate_statistics(
+            {
+                "audited_dependencies": 1,
+                "skipped_dependencies": 0,
+                "total_dependencies": 2,
+            }
+        )
+
+
+def test_validate_statistics_returns_complete_tuple(statistics_service):
+    assert statistics_service._validate_statistics(
+        {
+            "audited_dependencies": 2,
+            "skipped_dependencies": 0,
+            "total_dependencies": 2,
+        }
+    ) == (2, 0, 2)
+
+
+def test_validate_statistics_returns_incomplete_tuple(statistics_service):
+    assert statistics_service._validate_statistics(
+        {
+            "audited_dependencies": 1,
+            "skipped_dependencies": 1,
+            "total_dependencies": 2,
+        }
+    ) == (1, 1, 2)
+
+
+def test_invalid_statistics_skip_finding_mapping_and_saving(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator, monkeypatch
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(make_finding(),),
+        raw_metadata={"audited_dependencies": 1, "skipped_dependencies": 0},
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    calls = []
+    original_map = service._map_findings
+    original_save = service._save_findings
+
+    def map_spy(discovery, selected, findings):
+        calls.append("map")
+        return original_map(discovery, selected, findings)
+
+    def save_spy(project_id, task_id, findings):
+        calls.append("save")
+        return original_save(project_id, task_id, findings)
+
+    monkeypatch.setattr(service, "_map_findings", map_spy)
+    monkeypatch.setattr(service, "_save_findings", save_spy)
+    outcome = service.run_audit(local_project.project_id)
+
+    assert calls == []
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert "依赖审计统计非法" in outcome.task.error_message
+    assert outcome.findings == ()
+    assert service.list_findings(local_project.project_id) == []
+
+
+def test_incomplete_statistics_map_then_save_and_fail_without_success_summary(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator, monkeypatch
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\nsafe-package==1.0\n", encoding="utf-8"
+    )
+    scanner = FakePipAuditScanner(
+        findings=(make_finding(),), audited=1, skipped=1, total=2
+    )
+    service = make_service(db, audit, scope_validator, projects, scanner, tmp_path)
+    calls = []
+    original_map = service._map_findings
+    original_save = service._save_findings
+
+    def map_spy(discovery, selected, findings):
+        calls.append("map")
+        return original_map(discovery, selected, findings)
+
+    def save_spy(project_id, task_id, findings):
+        calls.append("save")
+        return original_save(project_id, task_id, findings)
+
+    monkeypatch.setattr(service, "_map_findings", map_spy)
+    monkeypatch.setattr(service, "_save_findings", save_spy)
+    outcome = service.run_audit(local_project.project_id)
+
+    assert calls == ["map", "save"]
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert "审计不完整" in outcome.task.error_message
+    assert "未发现已知漏洞" not in str(outcome.task.result_summary or "")
+    assert len(outcome.findings) == 1
+    stored = service.list_findings(local_project.project_id, task_id=outcome.task.task_id)
+    assert len(stored) == 1
+
+
+def test_statistics_validation_error_skips_mapping_and_returns_statistics_error(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator, monkeypatch
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\n", encoding="utf-8"
+    )
+    service = make_service(
+        db,
+        audit,
+        scope_validator,
+        projects,
+        FakePipAuditScanner(findings=(make_finding(),)),
+        tmp_path,
+    )
+    calls = []
+
+    def raise_validation_error(metadata):
+        calls.append("validate")
+        raise ValidationError("测试统计损坏")
+
+    def fail_if_mapped(*args, **kwargs):
+        calls.append("map")
+        raise AssertionError("统计非法时不应映射 Finding")
+
+    def fail_if_saved(*args, **kwargs):
+        calls.append("save")
+        raise AssertionError("统计非法时不应保存 Finding")
+
+    monkeypatch.setattr(service, "_validate_statistics", raise_validation_error)
+    monkeypatch.setattr(service, "_map_findings", fail_if_mapped)
+    monkeypatch.setattr(service, "_save_findings", fail_if_saved)
+    outcome = service.run_audit(local_project.project_id)
+
+    assert calls == ["validate"]
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert "依赖审计统计非法：测试统计损坏" in outcome.task.error_message
+    assert service.list_findings(local_project.project_id) == []
+
+
+def test_statistics_unexpected_exception_is_labeled_and_skips_mapping(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator, monkeypatch
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\n", encoding="utf-8"
+    )
+    service = make_service(
+        db,
+        audit,
+        scope_validator,
+        projects,
+        FakePipAuditScanner(findings=(make_finding(),)),
+        tmp_path,
+    )
+    calls = []
+
+    def raise_runtime_error(metadata):
+        calls.append("validate")
+        raise RuntimeError("boom")
+
+    def fail_if_mapped(*args, **kwargs):
+        calls.append("map")
+        raise AssertionError("统计异常时不应映射 Finding")
+
+    def fail_if_saved(*args, **kwargs):
+        calls.append("save")
+        raise AssertionError("统计异常时不应保存 Finding")
+
+    monkeypatch.setattr(service, "_validate_statistics", raise_runtime_error)
+    monkeypatch.setattr(service, "_map_findings", fail_if_mapped)
+    monkeypatch.setattr(service, "_save_findings", fail_if_saved)
+    outcome = service.run_audit(local_project.project_id)
+
+    assert calls == ["validate"]
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert "依赖审计统计校验异常：boom" in outcome.task.error_message
+    assert "依赖审计统计非法" not in outcome.task.error_message
+    assert service.list_findings(local_project.project_id) == []
+
+
+def test_finding_save_exception_is_not_reported_as_statistics_error(
+    projects, scopes, local_project, local_source, tmp_path, db, audit, scope_validator, monkeypatch
+):
+    ensure_asset(scopes, local_project, local_source)
+    (local_source / "requirements.txt").write_text(
+        "requests==2.19.0\n", encoding="utf-8"
+    )
+    service = make_service(
+        db,
+        audit,
+        scope_validator,
+        projects,
+        FakePipAuditScanner(findings=(), audited=1, skipped=0, total=1),
+        tmp_path,
+    )
+
+    def fail_to_save(project_id, task_id, findings):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(service, "_save_findings", fail_to_save)
+    outcome = service.run_audit(local_project.project_id)
+
+    assert outcome.task.status is ScanTaskStatus.FAILED
+    assert "依赖审计结果保存失败：disk full" in outcome.task.error_message
+    assert "依赖审计统计非法" not in outcome.task.error_message
+    assert "依赖审计统计校验异常" not in outcome.task.error_message
+    assert service.list_findings(local_project.project_id) == []

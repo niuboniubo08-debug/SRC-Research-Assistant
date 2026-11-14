@@ -9,7 +9,8 @@
 AUDIT_TYPE = READ_ONLY
 PROJECT_FILES_MODIFIED = NO
 DATABASE_MODIFIED = NO
-GIT_MUTATIONS = NO
+GIT_MUTATIONS_BY_AUDIT = NO
+EXTERNAL_GIT_COMMIT_OBSERVED = YES
 TESTS_RUN = NO
 ```
 
@@ -19,7 +20,7 @@ TESTS_RUN = NO
 
 ## 1. 当前 Git 状态
 
-### 1.1 实际命令结果
+### 1.1 初始审计快照（2026-11-12 22:48）
 
 `git status --short --untracked-files=all`：
 
@@ -52,7 +53,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 5595ef9 chore: establish initial project baseline
 ```
 
-### 1.2 状态分类
+### 1.2 初始快照分类
 
 ```text
 CURRENT_BRANCH = main
@@ -73,9 +74,77 @@ docs/GIT_8B_1_TRAILING_WHITESPACE_FIX.md
 docs/GIT_8B_STAGING_AUDIT.md
 ```
 
-本报告生成后会成为第 3 个未跟踪文件；这不是业务代码修改，也没有执行 `git add`、`commit` 或 `push`。
+本报告在初始快照后生成；最终状态见 1.3，外部提交已收录两个 Git-8B 报告。本轮没有执行 `git add`、`commit` 或 `push`。
 
 `origin/main` 存在且本地领先 1 个提交，说明 Git-8C 的提交仍在本地；本轮没有网络写操作。
+
+### 1.3 审计期间的外部 Git 变更（两次）
+
+初始快照之后，最终只读复核观察到两次**本任务未执行**的外部提交。
+
+第一次提交：
+
+```text
+HEAD = 5886ed3396d8c3ca08eabcda46f783509e79dd41
+PARENT = 635f736687a8a89117a28699c49bf1fbfcc5d796
+SUBJECT = docs: add Git-8B staging audit and whitespace fix reports
+AUTHOR = niuboniubo08-debug <niuboniubo08@gmail.com>
+COMMIT_TIME = 2026-11-12T22:49:47+08:00
+FILES = docs/GIT_8B_1_TRAILING_WHITESPACE_FIX.md,
+        docs/GIT_8B_STAGING_AUDIT.md
+CHANGES = 2 files, 459 insertions
+```
+
+第二次提交：
+
+```text
+HEAD = 9ca064eeb6038e097960253691a699822c4703ca
+PARENT = 5886ed3396d8c3ca08eabcda46f783509e79dd41
+SUBJECT = docs: add Git-8B staging audit and whitespace fix reports
+AUTHOR = niuboniubo08-debug <niuboniubo08@gmail.com>
+COMMIT_TIME = 2026-11-12T22:50:44+08:00
+FILES = docs/PHASE6_NEXT_STEP_CONTINUATION_AUDIT.md
+CHANGES = 1 file, 385 insertions
+```
+
+第二次提交的 subject 与第一次相同，但它新增的是本报告的初始版本（385 行），不是 Git-8B 报告。该提交把本报告从“未跟踪”变成了“已跟踪”；当前工作区中本报告又因本次修订变为 `M`。
+
+本任务没有执行 `git add`、`git commit` 或 `git push`；本轮只执行了 `git status`、`git log`、`git show`、`git rev-parse`、`git reflog`、`git diff` 等只读命令。因此：
+
+```text
+GIT_MUTATIONS_BY_AUDIT = NO
+EXTERNAL_GIT_COMMIT_OBSERVED = YES
+EXTERNAL_COMMIT_COUNT = 2
+GIT_STATE_CHANGED_DURING_AUDIT = YES_EXTERNAL
+```
+
+最终只读状态：
+
+```text
+CURRENT_BRANCH = main
+CURRENT_HEAD = 9ca064eeb6038e097960253691a699822c4703ca
+RECENT_COMMITS = 6
+UPSTREAM = origin/main
+LOCAL_AHEAD_BEHIND_STATUS = ahead 3, behind 0
+
+STAGED_FILES = 0
+UNSTAGED_TRACKED_MODIFICATIONS = 1
+UNSTAGED_TRACKED_PATH = docs/PHASE6_NEXT_STEP_CONTINUATION_AUDIT.md
+UNTRACKED_FILES = 0
+```
+
+最终最近提交：
+
+```text
+9ca064e docs: add Git-8B staging audit and whitespace fix reports
+5886ed3 docs: add Git-8B staging audit and whitespace fix reports
+635f736 docs: finalize Phase 6 P2B documentation and acceptance
+73cb081 docs: 归档 Git-7 及 Phase 6 阶段调查报告
+936c617 docs: archive Git repository establishment audits
+5595ef9 chore: establish initial project baseline
+```
+
+这两次外部提交不改变 Phase 6 实现结论，但使本报告的 Git 快照与最终仓库状态不同。报告明确保留初始快照与最终状态，避免把初始快照冒充为最终状态。
 
 ---
 
@@ -335,8 +404,17 @@ RECOMMENDATION_CONFIDENCE = MEDIUM
 
 PROJECT_FILES_MODIFIED = NO
 DATABASE_MODIFIED = NO
-GIT_MUTATIONS = NO
+GIT_MUTATIONS_BY_AUDIT = NO
+EXTERNAL_GIT_COMMIT_OBSERVED = YES
+EXTERNAL_COMMIT_COUNT = 2
 TESTS_RUN = NO
+
+CURRENT_BRANCH = main
+CURRENT_HEAD = 9ca064eeb6038e097960253691a699822c4703ca
+COMMIT_COUNT = 6
+UNTRACKED_FILES = 0
+UNSTAGED_TRACKED_MODIFICATIONS = 1
+REPORT_WORKTREE_STATUS = MODIFIED
 
 HTML_REPORT = IMPLEMENTED_AND_VERIFIED
 REPORT_GUI = IMPLEMENTED_AND_VERIFIED
@@ -376,10 +454,12 @@ NEXT_RECOMMENDED_TASK = Phase 6D-1 JSON Export Approval & Design Gate
 未开始 Phase 6D 实现
 ```
 
+审计期间观察到两次外部提交（`5886ed3` 与 `9ca064e`），提交命令不是本任务执行的；详情见 1.3。
+
 唯一新增文件为本报告：
 
 ```text
 docs/PHASE6_NEXT_STEP_CONTINUATION_AUDIT.md
 ```
 
-Git 中仍保留原有的 2 个未跟踪报告；本报告成为第 3 个未跟踪文件，等待人工审核。
+最终 Git 中本报告处于 `M`（已跟踪但工作区有本次修订），没有其他未跟踪文件。两个 Git-8B 报告已先由 `5886ed3` 收录，本报告初始版本由 `9ca064e` 收录；本次修订等待人工审核。

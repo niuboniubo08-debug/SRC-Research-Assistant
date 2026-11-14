@@ -191,8 +191,10 @@ class PipAuditScanner(BaseScanner):
             raise ScannerExecutionError(
                 f"pip-audit 执行失败（退出码 {result.returncode}）：{detail[:1000]}"
             )
-        findings, warnings, audited = self.parse_output(
-            result.stdout, target_path, availability.version
+        findings, warnings, audited, skipped, total = (
+            self._parse_with_statistics(
+                result.stdout, target_path, availability.version
+            )
         )
         if result.output_truncated:
             warnings.append("pip-audit 输出超过捕获上限，结果可能不完整。")
@@ -203,6 +205,8 @@ class PipAuditScanner(BaseScanner):
                 "returncode": result.returncode,
                 "duration_seconds": round(result.duration_seconds, 3),
                 "audited_dependencies": audited,
+                "skipped_dependencies": skipped,
+                "total_dependencies": total,
                 "vulnerability_service": self.vulnerability_service,
             },
         )
@@ -210,6 +214,14 @@ class PipAuditScanner(BaseScanner):
     def parse_output(
         self, payload_text: str, target: Path, version: str
     ) -> tuple[list[Finding], list[str], int]:
+        findings, warnings, audited, _skipped, _total = (
+            self._parse_with_statistics(payload_text, target, version)
+        )
+        return findings, warnings, audited
+
+    def _parse_with_statistics(
+        self, payload_text: str, target: Path, version: str
+    ) -> tuple[list[Finding], list[str], int, int, int]:
         try:
             payload = json.loads(payload_text)
         except json.JSONDecodeError as exc:
@@ -220,13 +232,22 @@ class PipAuditScanner(BaseScanner):
         findings: list[Finding] = []
         warnings: list[str] = []
         seen: set[tuple[str, str]] = set()
+        audited = 0
+        skipped = 0
+        total = 0
         dependencies = payload.get("dependencies", [])
         for dependency in dependencies:
+            total += 1
             if not isinstance(dependency, dict):
                 continue
             name = str(dependency.get("name") or "").strip()
             current_version = str(dependency.get("version") or "").strip()
-            skip_reason = str(dependency.get("skip_reason") or "").strip()
+            skip_reason_raw = dependency.get("skip_reason")
+            skip_reason = str(skip_reason_raw or "").strip()
+            if bool(skip_reason_raw):
+                skipped += 1
+            else:
+                audited += 1
             if skip_reason:
                 warnings.append(f"{name or '未知依赖'} 未完成审计：{skip_reason}")
             vulns = dependency.get("vulns")
@@ -308,4 +329,4 @@ class PipAuditScanner(BaseScanner):
                         metadata=metadata,
                     )
                 )
-        return findings, warnings, len(dependencies)
+        return findings, warnings, audited, skipped, total
